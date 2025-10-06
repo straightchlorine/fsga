@@ -1,0 +1,23 @@
+# Core dependencies
+numpy>=1.24.0
+pandas>=2.0.0
+scikit-learn>=1.3.0
+matplotlib>=3.7.0
+seaborn>=0.12.0
+pyyaml>=6.0
+scipy>=1.10.0
+
+# Optional: Advanced ML models (uncomment if needed)
+# xgboost>=2.0.0
+# lightgbm>=4.0.0
+
+# Optional: Interactive visualizations (uncomment if needed)
+# plotly>=5.17.0
+# ipywidgets>=8.1.0
+
+# Development dependencies (install with: pip install -r requirements-dev.txt)
+# pytest>=7.4.0
+# pytest-cov>=4.1.0
+# ruff>=0.1.0
+# mypy>=1.5.0
+# black>=23.7.0
