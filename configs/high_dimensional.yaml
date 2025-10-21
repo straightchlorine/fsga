@@ -1,0 +1,47 @@
+# Configuration for high-dimensional datasets (digits, etc.)
+
+# Moderate population for high-dimensional search space
+population_size: 80
+num_generations: 150
+early_stopping_patience: 15
+
+# Higher mutation rate for exploration in large space
+mutation_rate: 0.02
+crossover_rate: 0.85
+
+# Selection
+tournament_size: 4
+
+# Dataset configuration
+dataset:
+  name: digits
+  test_size: 0.2
+  val_size: 0.1
+  stratify: true
+  random_state: 42
+
+# Model configuration
+model:
+  type: rf  # Fast and robust for high dimensions
+  random_state: 42
+  n_estimators: 100
+  max_depth: 20  # Limit depth for speed
+  max_features: sqrt  # Subsampling for efficiency
+
+# Evaluation
+evaluator:
+  type: accuracy
+  cv_folds: 3  # 3-fold for speed with large feature space
+
+# Operators
+operators:
+  crossover: multi_point  # More diversity in high dimensions
+  mutation: bitflip
+  selector: tournament
+
+# Logging
+verbose: true
+log_frequency: 10
+
+# Random seed
+random_state: 42

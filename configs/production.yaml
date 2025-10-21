@@ -1,0 +1,54 @@
+# Production configuration for full experiments
+
+# Larger population for better exploration
+population_size: 100
+num_generations: 200
+early_stopping_patience: 20
+
+# Genetic operators
+mutation_rate: 0.01
+crossover_rate: 0.9
+
+# Selection
+tournament_size: 5
+
+# Dataset configuration
+dataset:
+  name: breast_cancer
+  test_size: 0.2
+  val_size: 0.1
+  stratify: true
+  random_state: 42
+
+# Model configuration
+model:
+  type: rf
+  random_state: 42
+  n_estimators: 200
+  max_depth: null
+  min_samples_split: 2
+  min_samples_leaf: 1
+
+# Evaluation
+evaluator:
+  type: balanced_accuracy  # Better for imbalanced data
+  cv_folds: 5  # 5-fold CV for robust evaluation
+
+# Operators
+operators:
+  crossover: two_point
+  mutation: bitflip
+  selector: tournament
+
+# Logging
+verbose: true
+log_frequency: 10
+
+# Random seed for reproducibility
+random_state: 42
+
+# Checkpointing
+checkpoint:
+  enabled: true
+  frequency: 25  # Save every 25 generations
+  directory: results/checkpoints

@@ -1,0 +1,47 @@
+# Default configuration for feature selection GA
+
+# Population parameters
+population_size: 50
+num_generations: 100
+early_stopping_patience: 10
+
+# Genetic operators
+mutation_rate: 0.01
+crossover_rate: 0.8
+
+# Selection
+tournament_size: 3
+
+# Dataset configuration
+dataset:
+  name: iris  # iris, wine, breast_cancer, digits
+  test_size: 0.2
+  val_size: 0.1
+  stratify: true
+  random_state: 42
+
+# Model configuration
+model:
+  type: rf  # rf, svm, lr, knn, dt, nb
+  random_state: 42
+  # RandomForest specific
+  n_estimators: 100
+  max_depth: null
+
+# Evaluation
+evaluator:
+  type: accuracy  # accuracy, balanced_accuracy, f1
+  cv_folds: null  # Use validation set if null, otherwise k-fold CV
+
+# Operators
+operators:
+  crossover: uniform  # uniform, single_point, two_point, multi_point
+  mutation: bitflip  # bitflip
+  selector: tournament  # tournament, roulette, ranking, elitism
+
+# Logging
+verbose: true
+log_frequency: 10  # Log every N generations
+
+# Random seed
+random_state: 42

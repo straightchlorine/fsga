@@ -1,0 +1,46 @@
+# Quick test configuration for rapid experimentation
+
+# Small population for fast testing
+population_size: 20
+num_generations: 30
+early_stopping_patience: 5
+
+# Genetic operators
+mutation_rate: 0.02
+crossover_rate: 0.8
+
+# Selection
+tournament_size: 3
+
+# Dataset configuration
+dataset:
+  name: iris
+  test_size: 0.3
+  val_size: 0.0  # No validation set for speed
+  stratify: true
+  random_state: 42
+
+# Model configuration
+model:
+  type: rf
+  random_state: 42
+  n_estimators: 50  # Fewer trees for speed
+  max_depth: 10
+
+# Evaluation
+evaluator:
+  type: accuracy
+  cv_folds: null
+
+# Operators
+operators:
+  crossover: uniform
+  mutation: bitflip
+  selector: tournament
+
+# Logging
+verbose: true
+log_frequency: 5
+
+# Random seed
+random_state: 42
