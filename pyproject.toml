@@ -1,6 +1,6 @@
 [project]
 name = "fsga"
-version = "0.1.0"
+version = "0.1.1"
 description = "Feature Selection via Genetic Algorithm - ML framework for optimal feature subset discovery"
 readme = "README.md"
 
