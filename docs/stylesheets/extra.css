@@ -1,0 +1,29 @@
+/* Custom styles for FSGA documentation */
+
+/* Improve code block appearance */
+.highlight {
+    border-radius: 4px;
+}
+
+/* Badge styling */
+.md-typeset a.badge {
+    border-radius: 3px;
+    padding: 2px 6px;
+    font-size: 0.85em;
+}
+
+/* Custom admonition colors */
+.md-typeset .admonition.tip {
+    border-color: #00c853;
+}
+
+/* Improve table appearance */
+.md-typeset table:not([class]) {
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+/* Footer improvements */
+.md-footer-meta {
+    background-color: var(--md-footer-bg-color--dark);
+}
