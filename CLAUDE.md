@@ -2,17 +2,10 @@
 
 This document provides context for AI assistants (Claude, GPT, etc.) working on this project.
 
----
-
-## Project Genesis
-
-**Created**: 2025-10-06
-**Original Developer**: zweiss
-**AI Assistant**: Claude (Anthropic) via Claude Code CLI
-
 ### Origin Story
 
-This project was conceived during a conversation about creating a university ML project. The developer had an existing, well-structured genetic algorithm implementation for the knapsack problem ([~/code/knapsack-problem](../knapsack-problem/)) and wanted to:
+This project was conceived during a conversation about creating a university ML project.
+Quite a bit of code comes straight from ([knapsach-problem](https://github.com/straightchlorine/knapsack-problem/))  repository.
 
 1. Leverage that proven codebase
 2. Create something ML-related for a university assignment
@@ -75,43 +68,6 @@ fsga/
 
 ---
 
-## Development Context
-
-### Source Material
-
-**Primary Reference**: `/home/zweiss/code/knapsack-problem/`
-- Analyzed on 2025-10-06
-- Key files to port:
-  - `knapsack/genetic_algorithm.py` (225 lines) → `fsga/core/genetic_algorithm.py`
-  - `knapsack/population.py` (219 lines) → `fsga/core/population.py`
-  - `knapsack/operators/*.py` → `fsga/operators/*.py`
-  - `knapsack/mutations/*.py` → `fsga/mutations/*.py`
-  - `knapsack/selectors/*.py` → `fsga/selectors/*.py`
-
-**Do NOT port**:
-- `knapsack/dataset.py` - dataset logic is completely different (ML datasets vs. knapsack items)
-- `knapsack/evaluators/fitness.py` - fitness calculation is ML-based, not value/capacity
-
-### Current Status (as of 2025-10-06)
-
-**Completed**:
-- ✅ Directory structure created
-- ✅ Main README.md written
-- ✅ CLAUDE.md (this file) created
-- ✅ PROJECT_PLAN.md with 20-day timeline
-
-**In Progress**:
-- ⏳ Module READMEs (writing now)
-- ⏳ pyproject.toml setup
-
-**Not Started**:
-- ⬜ Core GA components (porting from knapsack)
-- ⬜ ML integration (evaluators, model wrappers)
-- ⬜ Experiments
-- ⬜ Tests
-
----
-
 ## Code Style & Conventions
 
 ### Inherited from Knapsack Project
@@ -166,44 +122,6 @@ indent-width = 4
 quote-style = "double"
 indent-style = "space"
 ```
-
----
-
-## Key Challenges & Solutions
-
-### Challenge 1: Fitness Evaluation Performance
-
-**Problem**: Training an ML model for every chromosome is expensive (O(n × train_time))
-
-**Solutions**:
-1. **Caching**: Hash chromosome → fitness mapping
-2. **Parallel Evaluation**: Use `multiprocessing` to evaluate population in parallel
-3. **Small Validation Set**: Use subset of data for fitness (not full training set)
-4. **Fast Models**: Default to RandomForest (fast) instead of SVM (slow)
-
-**Implementation Priority**: Start with naive approach, optimize later if needed
-
-### Challenge 2: Multi-Objective Optimization (NSGA-II)
-
-**Problem**: NSGA-II is complex (non-dominated sorting, crowding distance)
-
-**Solutions**:
-1. Use existing library (`pymoo`) if available
-2. Implement simplified version focusing on 2 objectives only
-3. Fallback: weighted sum approach (easier to implement)
-
-**Implementation Priority**: Phase 3 (not MVP)
-
-### Challenge 3: Feature Count = 0
-
-**Problem**: Chromosome with all 0s is invalid (no features selected)
-
-**Solutions**:
-1. **Fitness Penalty**: Return 0 fitness if no features selected
-2. **Repair Operator**: Force at least 1 feature to be 1
-3. **Initialization**: Ensure at least 1 feature in initial population
-
-**Chosen Approach**: #1 (simplest, lets GA learn)
 
 ---
 
@@ -403,22 +321,6 @@ When working on this project:
 
 ---
 
-## Questions & Decisions Log
-
-### Q1: Should we use pymoo for NSGA-II or implement from scratch?
-**Decision**: Implement simplified 2-objective version from scratch first (educational value, no external dependency). Can switch to pymoo if complexity grows.
-
-### Q2: How to handle categorical features?
-**Decision**: Phase 1 only supports numerical features (one-hot encode upstream). Add categorical support in Phase 3 if needed.
-
-### Q3: Cross-validation in fitness or separate validation set?
-**Decision**: Validation set by default (faster). Cross-validation as optional parameter for evaluators.
-
-### Q4: Store experiment results in database or files?
-**Decision**: Files (JSON/pickle) for simplicity. Database (SQLite) if we need complex queries.
-
----
-
 ## Glossary (For AI Context)
 
 | Term | Meaning in This Project |
@@ -432,22 +334,3 @@ When working on this project:
 | **Wrapper Method** | Feature selection using ML model performance (what we're building) |
 | **Filter Method** | Feature selection using statistical tests (mutual info, chi-squared) |
 | **Embedded Method** | Feature selection built into model (LASSO, tree importance) |
-
----
-
-## Contact & Collaboration
-
-**Primary Developer**: zweiss (GitHub: @zweiss)
-**AI Collaborator**: Claude (Anthropic) via Claude Code
-**Project Start**: 2025-10-06
-**Expected Completion**: 2025-10-26 (20-day timeline from PROJECT_PLAN.md)
-
-For questions or collaboration:
-- Open an issue on GitHub
-- See PROJECT_PLAN.md for detailed roadmap
-- Check module READMEs for component-specific docs
-
----
-
-**Last Updated**: 2025-10-06
-**Status**: Foundation phase (scaffolding complete, starting implementation)

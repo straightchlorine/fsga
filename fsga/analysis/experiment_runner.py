@@ -4,6 +4,7 @@ Provides a unified framework for running experiments, comparing methods,
 and generating results with statistical analysis.
 """
 
+import logging
 import time
 from pathlib import Path
 from typing import Optional
@@ -27,6 +28,8 @@ from fsga.utils.metrics import (
     wilcoxon_test,
 )
 from fsga.utils.serialization import ResultsSerializer
+
+logger = logging.getLogger(__name__)
 
 
 class ExperimentRunner:
@@ -83,7 +86,7 @@ class ExperimentRunner:
             dict: Aggregated results from all runs
         """
         if verbose:
-            print(f"Running GA experiment on {self.dataset_name} ({self.n_runs} runs)")
+            logger.info(f"Running GA experiment on {self.dataset_name} ({self.n_runs} runs)")
 
         all_chromosomes = []
         all_accuracies = []
@@ -150,7 +153,7 @@ class ExperimentRunner:
             all_fitness_histories.append(results["best_fitness_history"])
 
             if verbose and (run_idx + 1) % max(1, self.n_runs // 10) == 0:
-                print(
+                logger.info(
                     f"  Run {run_idx + 1}/{self.n_runs}: "
                     f"Acc={accuracy:.4f}, Features={len(selected_indices)}/{X_train.shape[1]}"
                 )
@@ -189,7 +192,7 @@ class ExperimentRunner:
             dict: Results from baseline method
         """
         if verbose:
-            print(
+            logger.info(
                 f"Running {method.upper()} baseline on {self.dataset_name} ({self.n_runs} runs)"
             )
 
@@ -243,7 +246,7 @@ class ExperimentRunner:
             all_runtimes.append(runtime)
 
             if verbose and (run_idx + 1) % max(1, self.n_runs // 10) == 0:
-                print(
+                logger.info(
                     f"  Run {run_idx + 1}/{self.n_runs}: "
                     f"Acc={accuracy:.4f}, Features={len(selected_indices)}/{X_train.shape[1]}"
                 )
@@ -277,7 +280,7 @@ class ExperimentRunner:
             dict: Results from using all features
         """
         if verbose:
-            print(
+            logger.info(
                 f"Running All Features baseline on {self.dataset_name} ({self.n_runs} runs)"
             )
 
@@ -368,19 +371,19 @@ class ExperimentRunner:
             }
 
             if verbose:
-                print(f"\nGA vs {method_name}:")
-                print(f"  GA Mean: {comparisons[method_name]['ga_mean']:.4f}")
-                print(
+                logger.info(f"\nGA vs {method_name}:")
+                logger.info(f"  GA Mean: {comparisons[method_name]['ga_mean']:.4f}")
+                logger.info(
                     f"  {method_name} Mean: {comparisons[method_name]['baseline_mean']:.4f}"
                 )
-                print(
+                logger.info(
                     f"  Improvement: {comparisons[method_name]['improvement']:.4f} ({comparisons[method_name]['improvement']*100:.2f}%)"
                 )
-                print(f"  p-value: {comparisons[method_name]['p_value']:.4f}")
-                print(
+                logger.info(f"  p-value: {comparisons[method_name]['p_value']:.4f}")
+                logger.info(
                     f"  Significant: {'Yes' if comparisons[method_name]['significant'] else 'No'}"
                 )
-                print(f"  Effect Size (Cohen's d): {comparisons[method_name]['effect_size']:.3f}")
+                logger.info(f"  Effect Size (Cohen's d): {comparisons[method_name]['effect_size']:.3f}")
 
         return comparisons
 
@@ -407,7 +410,7 @@ class ExperimentRunner:
             },
         )
 
-        print(f"Results saved to {filepath}")
+        logger.info(f"Results saved to {filepath}")
 
     def generate_summary_report(self) -> str:
         """Generate a text summary of all results.

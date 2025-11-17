@@ -403,3 +403,303 @@ def plot_combined_dashboard(
         plt.show()
 
     return fig
+
+
+def plot_feature_count_comparison(
+    results_dict: dict[str, dict],
+    metric_name: str = "Number of Features",
+    title: str = "Feature Count Comparison",
+    save_path: Optional[Path | str] = None,
+    show: bool = True,
+) -> plt.Figure:
+    """Plot feature count comparison across methods.
+
+    Args:
+        results_dict: Dictionary mapping method names to result dicts
+                     (must contain 'n_features' or 'mean_n_features')
+        metric_name: Name of the metric being compared
+        title: Plot title
+        save_path: Path to save figure (optional)
+        show: Whether to display the plot
+
+    Returns:
+        matplotlib.figure.Figure: The created figure
+
+    Example:
+        >>> results = {
+        ...     'GA': {'n_features': np.array([12, 13, 11, 12])},
+        ...     'RFE': {'n_features': np.array([15, 15, 15, 15])},
+        ...     'All Features': {'n_features': 30}
+        ... }
+        >>> fig = plot_feature_count_comparison(results)
+    """
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    methods = list(results_dict.keys())
+    data = []
+
+    for method in methods:
+        result = results_dict[method]
+        # Handle both array and scalar n_features
+        if "n_features" in result:
+            n_feat = result["n_features"]
+            if isinstance(n_feat, (int, float)):
+                # Scalar (e.g., "All Features")
+                data.append([n_feat])
+            else:
+                # Array (multiple runs)
+                data.append(n_feat)
+        elif "mean_n_features" in result:
+            # Fallback to mean if only mean available
+            data.append([result["mean_n_features"]])
+        else:
+            raise ValueError(f"Method '{method}' missing n_features data")
+
+    bp = ax.boxplot(data, labels=methods, patch_artist=True, showmeans=True)
+
+    # Color the boxes
+    colors = plt.cm.Set3(np.linspace(0, 1, len(methods)))
+    for patch, color in zip(bp["boxes"], colors):
+        patch.set_facecolor(color)
+
+    ax.set_ylabel(metric_name, fontsize=12)
+    ax.set_title(title, fontsize=14, fontweight="bold")
+    ax.grid(True, alpha=0.3, axis="y")
+
+    plt.xticks(rotation=15, ha="right")
+    plt.tight_layout()
+
+    if save_path:
+        fig.savefig(save_path, dpi=300, bbox_inches="tight")
+
+    if show:
+        plt.show()
+
+    return fig
+
+
+def plot_multi_metric_comparison(
+    results_dict: dict[str, dict],
+    title: str = "Multi-Metric Comparison",
+    save_path: Optional[Path | str] = None,
+    show: bool = True,
+) -> plt.Figure:
+    """Plot 2x2 grid comparing multiple metrics across methods.
+
+    Args:
+        results_dict: Dictionary mapping method names to result dicts
+                     (must contain accuracies, n_features, runtimes, stability)
+        title: Overall title
+        save_path: Path to save figure (optional)
+        show: Whether to display the plot
+
+    Returns:
+        matplotlib.figure.Figure: The created figure
+
+    Example:
+        >>> results = {
+        ...     'GA': {
+        ...         'accuracies': np.array([0.95, 0.94, 0.96]),
+        ...         'n_features': np.array([12, 13, 11]),
+        ...         'runtimes': np.array([2.1, 2.3, 2.0]),
+        ...         'stability': 0.85
+        ...     },
+        ...     'RFE': {...}
+        ... }
+        >>> fig = plot_multi_metric_comparison(results)
+    """
+    fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+    fig.suptitle(title, fontsize=16, fontweight="bold")
+
+    methods = list(results_dict.keys())
+    colors = plt.cm.Set3(np.linspace(0, 1, len(methods)))
+
+    # 1. Accuracy (top-left)
+    ax1 = axes[0, 0]
+    acc_data = [results_dict[m]["accuracies"] for m in methods]
+    bp1 = ax1.boxplot(acc_data, labels=methods, patch_artist=True, showmeans=True)
+    for patch, color in zip(bp1["boxes"], colors):
+        patch.set_facecolor(color)
+    ax1.set_ylabel("Accuracy", fontsize=11)
+    ax1.set_title("Classification Accuracy", fontweight="bold")
+    ax1.grid(True, alpha=0.3, axis="y")
+    ax1.tick_params(axis="x", rotation=15)
+
+    # 2. Feature Count (top-right)
+    ax2 = axes[0, 1]
+    feat_data = []
+    for m in methods:
+        n_feat = results_dict[m].get("n_features")
+        if isinstance(n_feat, (int, float)):
+            feat_data.append([n_feat])
+        else:
+            feat_data.append(n_feat)
+    bp2 = ax2.boxplot(feat_data, labels=methods, patch_artist=True, showmeans=True)
+    for patch, color in zip(bp2["boxes"], colors):
+        patch.set_facecolor(color)
+    ax2.set_ylabel("Number of Features", fontsize=11)
+    ax2.set_title("Feature Count (Sparsity)", fontweight="bold")
+    ax2.grid(True, alpha=0.3, axis="y")
+    ax2.tick_params(axis="x", rotation=15)
+
+    # 3. Runtime (bottom-left)
+    ax3 = axes[1, 0]
+    runtime_data = [results_dict[m]["runtimes"] for m in methods]
+    bp3 = ax3.boxplot(runtime_data, labels=methods, patch_artist=True, showmeans=True)
+    for patch, color in zip(bp3["boxes"], colors):
+        patch.set_facecolor(color)
+    ax3.set_ylabel("Runtime (seconds)", fontsize=11)
+    ax3.set_title("Computational Efficiency", fontweight="bold")
+    ax3.grid(True, alpha=0.3, axis="y")
+    ax3.tick_params(axis="x", rotation=15)
+
+    # 4. Stability (bottom-right) - bar chart
+    ax4 = axes[1, 1]
+    stability_data = [results_dict[m].get("stability", 0) for m in methods]
+    bars = ax4.bar(methods, stability_data, color=colors, alpha=0.7)
+    ax4.set_ylabel("Jaccard Stability", fontsize=11)
+    ax4.set_title("Feature Selection Stability", fontweight="bold")
+    ax4.set_ylim(0, 1.05)
+    ax4.grid(True, alpha=0.3, axis="y")
+    ax4.tick_params(axis="x", rotation=15)
+
+    # Add value labels on bars
+    for bar, val in zip(bars, stability_data):
+        height = bar.get_height()
+        ax4.text(
+            bar.get_x() + bar.get_width() / 2.0,
+            height,
+            f"{val:.3f}",
+            ha="center",
+            va="bottom",
+            fontsize=9,
+        )
+
+    plt.tight_layout()
+
+    if save_path:
+        fig.savefig(save_path, dpi=300, bbox_inches="tight")
+
+    if show:
+        plt.show()
+
+    return fig
+
+
+def plot_accuracy_vs_sparsity(
+    results_dict: dict[str, dict],
+    total_features: int,
+    title: str = "Accuracy vs. Sparsity Trade-off",
+    save_path: Optional[Path | str] = None,
+    show: bool = True,
+) -> plt.Figure:
+    """Plot accuracy vs sparsity scatter plot.
+
+    Shows the trade-off between accuracy and feature reduction.
+    Goal: Top-right corner (high accuracy, high sparsity).
+
+    Args:
+        results_dict: Dictionary mapping method names to result dicts
+        total_features: Total number of features in dataset
+        title: Plot title
+        save_path: Path to save figure (optional)
+        show: Whether to display the plot
+
+    Returns:
+        matplotlib.figure.Figure: The created figure
+
+    Example:
+        >>> fig = plot_accuracy_vs_sparsity(results, total_features=30)
+    """
+    fig, ax = plt.subplots(figsize=(10, 7))
+
+    methods = list(results_dict.keys())
+    colors = plt.cm.Set3(np.linspace(0, 1, len(methods)))
+
+    for i, (method, results) in enumerate(results_dict.items()):
+        accuracies = results["accuracies"]
+        n_features = results.get("n_features")
+
+        if isinstance(n_features, (int, float)):
+            # Scalar
+            sparsity = 1 - (n_features / total_features)
+            ax.scatter(
+                [sparsity],
+                [accuracies.mean()],
+                s=200,
+                color=colors[i],
+                alpha=0.7,
+                label=method,
+                edgecolors="black",
+                linewidth=1.5,
+            )
+            # Error bars for accuracy
+            if len(accuracies) > 1:
+                ax.errorbar(
+                    [sparsity],
+                    [accuracies.mean()],
+                    yerr=[accuracies.std()],
+                    fmt="none",
+                    color=colors[i],
+                    alpha=0.5,
+                    capsize=5,
+                )
+        else:
+            # Array - plot all points
+            sparsities = 1 - (n_features / total_features)
+            ax.scatter(
+                sparsities,
+                accuracies,
+                s=150,
+                color=colors[i],
+                alpha=0.6,
+                label=method,
+                edgecolors="black",
+                linewidth=1,
+            )
+            # Plot mean
+            ax.scatter(
+                [sparsities.mean()],
+                [accuracies.mean()],
+                s=300,
+                color=colors[i],
+                alpha=1.0,
+                edgecolors="black",
+                linewidth=2,
+                marker="D",
+            )
+
+    ax.set_xlabel("Sparsity (1 - #features/#total)", fontsize=12)
+    ax.set_ylabel("Accuracy", fontsize=12)
+    ax.set_title(title, fontsize=14, fontweight="bold")
+    ax.legend(loc="best", fontsize=10)
+    ax.grid(True, alpha=0.3)
+
+    # Add ideal region annotation
+    ax.axhline(y=0.95, color="green", linestyle="--", alpha=0.3, linewidth=1)
+    ax.axvline(x=0.5, color="green", linestyle="--", alpha=0.3, linewidth=1)
+    ax.text(
+        0.98,
+        0.02,
+        "Goal: Top-right\n(High accuracy, High sparsity)",
+        transform=ax.transAxes,
+        fontsize=10,
+        verticalalignment="bottom",
+        horizontalalignment="right",
+        bbox=dict(boxstyle="round", facecolor="wheat", alpha=0.5),
+    )
+
+    ax.set_xlim(-0.05, 1.05)
+    ax.set_ylim(
+        max(0, min([r["accuracies"].min() for r in results_dict.values()]) - 0.05), 1.02
+    )
+
+    plt.tight_layout()
+
+    if save_path:
+        fig.savefig(save_path, dpi=300, bbox_inches="tight")
+
+    if show:
+        plt.show()
+
+    return fig
