@@ -5,7 +5,7 @@ for genetic algorithm experiments.
 """
 
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 import yaml
 
@@ -122,10 +122,10 @@ class Config:
             raise FileNotFoundError(f"Config file not found: {filepath}")
 
         try:
-            with open(filepath, "r") as f:
+            with open(filepath) as f:
                 config_dict = yaml.safe_load(f)
         except yaml.YAMLError as e:
-            raise ConfigError(f"Invalid YAML in {filepath}: {e}")
+            raise ConfigError(f"Invalid YAML in {filepath}: {e}") from e
 
         if config_dict is None:
             config_dict = {}
@@ -300,7 +300,9 @@ class Config:
             50
         """
         if name.startswith("_"):
-            raise AttributeError(f"'{self.__class__.__name__}' has no attribute '{name}'")
+            raise AttributeError(
+                f"'{self.__class__.__name__}' has no attribute '{name}'"
+            )
 
         if name in self._config:
             return self._config[name]

@@ -80,4 +80,4 @@ class RouletteSelector(Selector):
         return tuple(parents)
 
     def __str__(self):
-        return f"RouletteSelector"
+        return "RouletteSelector"

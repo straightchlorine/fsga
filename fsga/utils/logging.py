@@ -9,7 +9,7 @@ import logging
 import sys
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 
 class ExperimentLogger:
@@ -81,7 +81,7 @@ class ExperimentLogger:
             # Also create JSON log file
             self.json_log_file = self.log_dir / f"{experiment_name}_{timestamp}.jsonl"
 
-        self.start_time: Optional[datetime] = None
+        self.start_time: datetime | None = None
 
     def log_experiment_start(self, config: dict) -> None:
         """Log experiment start with configuration.
@@ -114,8 +114,8 @@ class ExperimentLogger:
         generation: int,
         best_fitness: float,
         avg_fitness: float,
-        diversity: Optional[float] = None,
-        num_features: Optional[int] = None,
+        diversity: float | None = None,
+        num_features: int | None = None,
         **kwargs,
     ) -> None:
         """Log generation progress.
@@ -232,7 +232,7 @@ class ExperimentLogger:
         self.logger.info(f"Checkpoint saved: {checkpoint_path}")
         self._write_json_log(log_entry)
 
-    def log_error(self, error: Exception, context: Optional[dict] = None) -> None:
+    def log_error(self, error: Exception, context: dict | None = None) -> None:
         """Log error with context.
 
         Args:
@@ -304,7 +304,7 @@ class ExperimentLogger:
 def setup_logger(
     name: str,
     level: str = "INFO",
-    log_file: Optional[str | Path] = None,
+    log_file: str | Path | None = None,
 ) -> logging.Logger:
     """Setup a basic logger with console and optional file output.
 
@@ -368,7 +368,7 @@ class ProgressTracker:
         self.current = 0
         self.start_time = datetime.now()
 
-    def update(self, current: int, metrics: Optional[dict] = None) -> None:
+    def update(self, current: int, metrics: dict | None = None) -> None:
         """Update progress.
 
         Args:

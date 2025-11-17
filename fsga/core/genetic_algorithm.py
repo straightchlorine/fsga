@@ -10,14 +10,13 @@ Key changes:
 """
 
 import time
-from typing import Optional
 
 import numpy as np
 
+from fsga.core.population import Population
 from fsga.evaluators.evaluator import Evaluator
 from fsga.mutations.mutation import Mutation
 from fsga.operators.crossover import Crossover
-from fsga.core.population import Population
 from fsga.selectors.selector import Selector
 
 
@@ -77,7 +76,7 @@ class GeneticAlgorithm:
         population_size: int = 50,
         num_generations: int = 100,
         mutation_rate: float = 0.01,
-        early_stopping_patience: Optional[int] = None,
+        early_stopping_patience: int | None = None,
         verbose: bool = False,
     ):
         """Initialize Genetic Algorithm.

@@ -4,18 +4,16 @@ Implements RFE, LASSO, Mutual Information, and Chi-squared feature selection
 to compare against the GA approach.
 """
 
-from typing import Optional
 
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.feature_selection import RFE as SklearnRFE
 from sklearn.feature_selection import (
-    SelectKBest,
     chi2,
     f_classif,
     mutual_info_classif,
 )
-from sklearn.feature_selection import RFE as SklearnRFE
-from sklearn.linear_model import LassoCV, LogisticRegression
+from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import MinMaxScaler
 
 
@@ -44,7 +42,7 @@ class BaselineSelector:
         """
         raise NotImplementedError
 
-    def get_selected_features(self, k: Optional[int] = None) -> np.ndarray:
+    def get_selected_features(self, k: int | None = None) -> np.ndarray:
         """Get indices of selected features.
 
         Args:
@@ -80,7 +78,7 @@ class RFESelector(BaselineSelector):
     def __init__(
         self,
         estimator=None,
-        n_features_to_select: Optional[int] = None,
+        n_features_to_select: int | None = None,
         step: int = 1,
         random_state: int = 42,
     ):
@@ -124,7 +122,7 @@ class RFESelector(BaselineSelector):
 
         return self
 
-    def get_selected_features(self, k: Optional[int] = None) -> np.ndarray:
+    def get_selected_features(self, k: int | None = None) -> np.ndarray:
         """Get selected features.
 
         Args:
@@ -150,7 +148,7 @@ class LASSOSelector(BaselineSelector):
     """
 
     def __init__(
-        self, alphas: Optional[list[float]] = None, cv: int = 5, random_state: int = 42
+        self, alphas: list[float] | None = None, cv: int = 5, random_state: int = 42
     ):
         """Initialize LASSO selector.
 
@@ -210,7 +208,7 @@ class LASSOSelector(BaselineSelector):
 
         return self
 
-    def get_selected_features(self, k: Optional[int] = None) -> np.ndarray:
+    def get_selected_features(self, k: int | None = None) -> np.ndarray:
         """Get selected features.
 
         Args:
@@ -260,7 +258,7 @@ class MutualInfoSelector(BaselineSelector):
 
         return self
 
-    def get_selected_features(self, k: Optional[int] = None) -> np.ndarray:
+    def get_selected_features(self, k: int | None = None) -> np.ndarray:
         """Get selected features.
 
         Args:
@@ -310,7 +308,7 @@ class Chi2Selector(BaselineSelector):
 
         return self
 
-    def get_selected_features(self, k: Optional[int] = None) -> np.ndarray:
+    def get_selected_features(self, k: int | None = None) -> np.ndarray:
         """Get selected features.
 
         Args:
@@ -356,7 +354,7 @@ class ANOVASelector(BaselineSelector):
 
         return self
 
-    def get_selected_features(self, k: Optional[int] = None) -> np.ndarray:
+    def get_selected_features(self, k: int | None = None) -> np.ndarray:
         """Get selected features.
 
         Args:

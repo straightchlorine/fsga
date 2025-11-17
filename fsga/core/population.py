@@ -8,7 +8,6 @@ Key changes:
 - Simplified interface (no dataset dependency)
 """
 
-from typing import Optional
 
 import numpy as np
 

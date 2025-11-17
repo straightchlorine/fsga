@@ -3,10 +3,9 @@
 Provides easy access to sklearn datasets with train/test splitting.
 """
 
-from typing import Optional, Tuple, Union
 
 import numpy as np
-from sklearn.datasets import load_iris, load_wine, load_breast_cancer, load_digits
+from sklearn.datasets import load_breast_cancer, load_digits, load_iris, load_wine
 from sklearn.model_selection import train_test_split
 
 
@@ -14,14 +13,10 @@ def load_dataset(
     name: str,
     split: bool = False,
     test_size: float = 0.2,
-    val_size: Optional[float] = None,
+    val_size: float | None = None,
     stratify: bool = True,
     random_state: int = 42,
-) -> Union[
-    Tuple[np.ndarray, np.ndarray, list],
-    Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, list],
-    Tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, list],
-]:
+) -> tuple[np.ndarray, np.ndarray, list] | tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, list] | tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, list]:
     """Load dataset from sklearn.
 
     Args:

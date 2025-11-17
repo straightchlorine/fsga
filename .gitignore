@@ -90,6 +90,7 @@ experiments/outputs/
 docs/_build/
 docs/_static/
 docs/_templates/
+site/  # MkDocs build output
 
 # OS-specific
 .DS_Store

@@ -1,7 +1,7 @@
 site_name: FSGA - Feature Selection via Genetic Algorithm
 site_description: Framework for automated feature selection using Genetic Algorithms
 site_author: Piotr Krzysztof Lis
-site_url: https://straightchlorine.github.io/fsga
+site_url: https://straightchlorine.github.io/feature-selection-via-genetic-algorithm
 
 repo_name: straightchlorine/feature-selection-via-genetic-algorithm
 repo_url: https://github.com/straightchlorine/feature-selection-via-genetic-algorithm
@@ -151,32 +151,5 @@ nav:
       - Tutorial: getting-started/tutorial.md
   - User Guide:
       - Architecture: user-guide/architecture.md
-      - Core Components: user-guide/core.md
-      - Operators: user-guide/operators.md
-      - Evaluators: user-guide/evaluators.md
-      - Experiment Runner: user-guide/experiments.md
-      - Visualization: user-guide/visualization.md
-  - API Reference:
-      - Core: api/core.md
-      - Operators: api/operators.md
-      - Mutations: api/mutations.md
-      - Selectors: api/selectors.md
-      - Evaluators: api/evaluators.md
-      - ML: api/ml.md
-      - Datasets: api/datasets.md
-      - Analysis: api/analysis.md
-      - Visualization: api/visualization.md
-      - Utils: api/utils.md
-  - Examples:
-      - Basic Usage: examples/basic.md
-      - Custom Operators: examples/custom-operators.md
-      - Multi-Objective: examples/multi-objective.md
-      - Large Datasets: examples/large-datasets.md
-  - Development:
-      - Contributing: development/contributing.md
-      - Testing: development/testing.md
-      - Roadmap: development/roadmap.md
   - About:
       - Project Plan: about/project-plan.md
-      - License: about/license.md
-      - Changelog: about/changelog.md

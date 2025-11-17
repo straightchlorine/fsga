@@ -157,6 +157,5 @@ python experiments/run_experiment.py --runs 20 --no-plots
 ## Next Steps
 
 - **[Tutorial](tutorial.md)** - Detailed walkthrough with examples
-- **[User Guide](../user-guide/architecture.md)** - Architecture and design
-- **[API Reference](../api/core.md)** - Complete API documentation
-- **[Examples](../examples/basic.md)** - More code examples
+- **[Architecture](../user-guide/architecture.md)** - System design and patterns
+- **[Project Plan](../about/project-plan.md)** - Development roadmap

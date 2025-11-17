@@ -82,9 +82,7 @@ pip install -e .
 
 - **[Getting Started](getting-started/installation.md)** - Installation and quick start
 - **[User Guide](user-guide/architecture.md)** - Detailed usage and architecture
-- **[API Reference](api/core.md)** - Complete API documentation
-- **[Examples](examples/basic.md)** - Code examples and tutorials
-- **[Development](development/contributing.md)** - Contributing and development guide
+- **[Project Plan](about/project-plan.md)** - Development roadmap and status
 
 ## Project Status
 
@@ -120,4 +118,4 @@ If you use this framework in research, please cite:
 
 ## License
 
-MIT License - see [LICENSE](about/license.md) for details.
+MIT License - see LICENSE file in the repository for details.

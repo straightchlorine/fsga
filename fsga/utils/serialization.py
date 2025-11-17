@@ -8,7 +8,7 @@ import json
 import pickle
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 import numpy as np
 
@@ -45,8 +45,8 @@ class ResultsSerializer:
         self,
         results: dict,
         filepath: str | Path,
-        metadata: Optional[dict] = None,
-        format: Optional[str] = None,
+        metadata: dict | None = None,
+        format: str | None = None,
     ) -> None:
         """Save GA results to file.
 
@@ -96,9 +96,9 @@ class ResultsSerializer:
             elif format == "npz":
                 self._save_numpy(save_data, filepath)
         except Exception as e:
-            raise SerializationError(f"Failed to save results: {e}")
+            raise SerializationError(f"Failed to save results: {e}") from e
 
-    def load_results(self, filepath: str | Path, format: Optional[str] = None) -> dict:
+    def load_results(self, filepath: str | Path, format: str | None = None) -> dict:
         """Load GA results from file.
 
         Args:
@@ -137,7 +137,7 @@ class ResultsSerializer:
             elif format == "npz":
                 return self._load_numpy(filepath)
         except Exception as e:
-            raise SerializationError(f"Failed to load results: {e}")
+            raise SerializationError(f"Failed to load results: {e}") from e
 
     def save_population(
         self, chromosomes: np.ndarray, fitness: np.ndarray, filepath: str | Path
@@ -273,7 +273,7 @@ class ResultsSerializer:
 
     def _load_json(self, filepath: Path) -> dict:
         """Load from JSON (arrays remain as lists, not numpy arrays)."""
-        with open(filepath, "r") as f:
+        with open(filepath) as f:
             return json.load(f)
 
     def _save_numpy(self, data: dict, filepath: Path) -> None:
@@ -334,7 +334,9 @@ class ResultsSerializer:
         if isinstance(obj, np.ndarray):
             return obj.tolist()
         elif isinstance(obj, dict):
-            return {key: self._convert_numpy_to_lists(value) for key, value in obj.items()}
+            return {
+                key: self._convert_numpy_to_lists(value) for key, value in obj.items()
+            }
         elif isinstance(obj, (list, tuple)):
             return [self._convert_numpy_to_lists(item) for item in obj]
         elif isinstance(obj, (np.integer, np.floating)):

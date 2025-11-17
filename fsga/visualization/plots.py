@@ -4,8 +4,8 @@ Provides plotting utilities for fitness evolution, population diversity,
 feature stability, and comparison across methods.
 """
 
+from itertools import zip_strict
 from pathlib import Path
-from typing import Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -13,10 +13,10 @@ import numpy as np
 
 def plot_fitness_evolution(
     best_fitness_history: list[float] | np.ndarray,
-    avg_fitness_history: Optional[list[float] | np.ndarray] = None,
-    worst_fitness_history: Optional[list[float] | np.ndarray] = None,
+    avg_fitness_history: list[float] | np.ndarray | None = None,
+    worst_fitness_history: list[float] | np.ndarray | None = None,
     title: str = "Fitness Evolution",
-    save_path: Optional[Path | str] = None,
+    save_path: Path | str | None = None,
     show: bool = True,
 ) -> plt.Figure:
     """Plot fitness evolution over generations.
@@ -79,7 +79,7 @@ def plot_fitness_evolution(
 def plot_diversity_evolution(
     diversity_history: list[float] | np.ndarray,
     title: str = "Population Diversity Evolution",
-    save_path: Optional[Path | str] = None,
+    save_path: Path | str | None = None,
     show: bool = True,
 ) -> plt.Figure:
     """Plot population diversity over generations.
@@ -127,10 +127,10 @@ def plot_diversity_evolution(
 
 def plot_convergence(
     fitness_history: list[float] | np.ndarray,
-    convergence_gen: Optional[int] = None,
+    convergence_gen: int | None = None,
     patience: int = 10,
     title: str = "Convergence Detection",
-    save_path: Optional[Path | str] = None,
+    save_path: Path | str | None = None,
     show: bool = True,
 ) -> plt.Figure:
     """Plot fitness with convergence point marked.
@@ -203,10 +203,10 @@ def plot_convergence(
 
 def plot_feature_frequency(
     frequencies: np.ndarray,
-    feature_names: Optional[list[str]] = None,
+    feature_names: list[str] | None = None,
     threshold: float = 0.5,
     title: str = "Feature Selection Frequency",
-    save_path: Optional[Path | str] = None,
+    save_path: Path | str | None = None,
     show: bool = True,
 ) -> plt.Figure:
     """Plot feature selection frequency across multiple runs.
@@ -273,7 +273,7 @@ def plot_method_comparison(
     results_dict: dict[str, list[float]],
     metric_name: str = "Accuracy",
     title: str = "Method Comparison",
-    save_path: Optional[Path | str] = None,
+    save_path: Path | str | None = None,
     show: bool = True,
 ) -> plt.Figure:
     """Plot box plot comparing multiple methods.
@@ -306,7 +306,7 @@ def plot_method_comparison(
 
     # Color the boxes
     colors = plt.cm.Set3(np.linspace(0, 1, len(methods)))
-    for patch, color in zip(bp["boxes"], colors):
+    for patch, color in zip_strict(bp["boxes"], colors):
         patch.set_facecolor(color)
 
     ax.set_ylabel(metric_name, fontsize=12)
@@ -329,9 +329,9 @@ def plot_combined_dashboard(
     best_fitness_history: list[float] | np.ndarray,
     diversity_history: list[float] | np.ndarray,
     frequencies: np.ndarray,
-    feature_names: Optional[list[str]] = None,
+    feature_names: list[str] | None = None,
     title: str = "GA Dashboard",
-    save_path: Optional[Path | str] = None,
+    save_path: Path | str | None = None,
     show: bool = True,
 ) -> plt.Figure:
     """Create a combined dashboard with multiple plots.
@@ -370,7 +370,9 @@ def plot_combined_dashboard(
 
     # Diversity evolution (top right)
     ax2 = plt.subplot(2, 2, 2)
-    ax2.plot(range(len(diversity_history)), diversity_history, linewidth=2, color="purple")
+    ax2.plot(
+        range(len(diversity_history)), diversity_history, linewidth=2, color="purple"
+    )
     ax2.set_xlabel("Generation")
     ax2.set_ylabel("Diversity")
     ax2.set_title("Population Diversity")
@@ -409,7 +411,7 @@ def plot_feature_count_comparison(
     results_dict: dict[str, dict],
     metric_name: str = "Number of Features",
     title: str = "Feature Count Comparison",
-    save_path: Optional[Path | str] = None,
+    save_path: Path | str | None = None,
     show: bool = True,
 ) -> plt.Figure:
     """Plot feature count comparison across methods.
@@ -459,7 +461,7 @@ def plot_feature_count_comparison(
 
     # Color the boxes
     colors = plt.cm.Set3(np.linspace(0, 1, len(methods)))
-    for patch, color in zip(bp["boxes"], colors):
+    for patch, color in zip_strict(bp["boxes"], colors):
         patch.set_facecolor(color)
 
     ax.set_ylabel(metric_name, fontsize=12)
@@ -481,7 +483,7 @@ def plot_feature_count_comparison(
 def plot_multi_metric_comparison(
     results_dict: dict[str, dict],
     title: str = "Multi-Metric Comparison",
-    save_path: Optional[Path | str] = None,
+    save_path: Path | str | None = None,
     show: bool = True,
 ) -> plt.Figure:
     """Plot 2x2 grid comparing multiple metrics across methods.
@@ -518,7 +520,7 @@ def plot_multi_metric_comparison(
     ax1 = axes[0, 0]
     acc_data = [results_dict[m]["accuracies"] for m in methods]
     bp1 = ax1.boxplot(acc_data, labels=methods, patch_artist=True, showmeans=True)
-    for patch, color in zip(bp1["boxes"], colors):
+    for patch, color in zip_strict(bp1["boxes"], colors):
         patch.set_facecolor(color)
     ax1.set_ylabel("Accuracy", fontsize=11)
     ax1.set_title("Classification Accuracy", fontweight="bold")
@@ -535,7 +537,7 @@ def plot_multi_metric_comparison(
         else:
             feat_data.append(n_feat)
     bp2 = ax2.boxplot(feat_data, labels=methods, patch_artist=True, showmeans=True)
-    for patch, color in zip(bp2["boxes"], colors):
+    for patch, color in zip_strict(bp2["boxes"], colors):
         patch.set_facecolor(color)
     ax2.set_ylabel("Number of Features", fontsize=11)
     ax2.set_title("Feature Count (Sparsity)", fontweight="bold")
@@ -546,7 +548,7 @@ def plot_multi_metric_comparison(
     ax3 = axes[1, 0]
     runtime_data = [results_dict[m]["runtimes"] for m in methods]
     bp3 = ax3.boxplot(runtime_data, labels=methods, patch_artist=True, showmeans=True)
-    for patch, color in zip(bp3["boxes"], colors):
+    for patch, color in zip_strict(bp3["boxes"], colors, strict=True):
         patch.set_facecolor(color)
     ax3.set_ylabel("Runtime (seconds)", fontsize=11)
     ax3.set_title("Computational Efficiency", fontweight="bold")
@@ -564,7 +566,7 @@ def plot_multi_metric_comparison(
     ax4.tick_params(axis="x", rotation=15)
 
     # Add value labels on bars
-    for bar, val in zip(bars, stability_data):
+    for bar, val in zip_strict(bars, stability_data):
         height = bar.get_height()
         ax4.text(
             bar.get_x() + bar.get_width() / 2.0,
@@ -590,7 +592,7 @@ def plot_accuracy_vs_sparsity(
     results_dict: dict[str, dict],
     total_features: int,
     title: str = "Accuracy vs. Sparsity Trade-off",
-    save_path: Optional[Path | str] = None,
+    save_path: Path | str | None = None,
     show: bool = True,
 ) -> plt.Figure:
     """Plot accuracy vs sparsity scatter plot.
@@ -686,7 +688,7 @@ def plot_accuracy_vs_sparsity(
         fontsize=10,
         verticalalignment="bottom",
         horizontalalignment="right",
-        bbox=dict(boxstyle="round", facecolor="wheat", alpha=0.5),
+        bbox={"boxstyle": "round", "facecolor": "wheat", "alpha": "0.5"},
     )
 
     ax.set_xlim(-0.05, 1.05)

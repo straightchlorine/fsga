@@ -131,7 +131,6 @@ plot_multi_metric_comparison(
 
 ## Next Steps
 
-- See [TUTORIAL.md](TUTORIAL.md) for detailed walkthrough
-- See [ARCHITECTURE.md](ARCHITECTURE.md) for system design
-- See [API_REFERENCE.md](API_REFERENCE.md) for complete API docs
+- See [Tutorial](tutorial.md) for detailed walkthrough
+- See [Architecture](../user-guide/architecture.md) for system design
 - See module READMEs in `fsga/*/README.md` for component details

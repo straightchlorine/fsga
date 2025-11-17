@@ -4,7 +4,6 @@ Includes stability metrics (Jaccard index), effect size calculations (Cohen's d)
 and convergence detection utilities.
 """
 
-from typing import Optional
 
 import numpy as np
 from scipy import stats
@@ -158,7 +157,7 @@ def convergence_detected(
     fitness_history: list[float] | np.ndarray,
     patience: int = 10,
     min_delta: float = 0.001,
-) -> Optional[int]:
+) -> int | None:
     """Detect convergence in fitness history.
 
     Convergence = no improvement > min_delta for patience generations.
@@ -255,7 +254,7 @@ def feature_selection_frequency(chromosomes: list[np.ndarray]) -> np.ndarray:
 def core_features(
     chromosomes: list[np.ndarray],
     threshold: float = 0.8,
-    feature_names: Optional[list[str]] = None,
+    feature_names: list[str] | None = None,
 ) -> list[int] | list[str]:
     """Get features selected in at least `threshold` fraction of runs.
 

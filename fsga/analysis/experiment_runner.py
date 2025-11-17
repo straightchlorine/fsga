@@ -7,11 +7,9 @@ and generating results with statistical analysis.
 import logging
 import time
 from pathlib import Path
-from typing import Optional
 
 import numpy as np
-from sklearn.metrics import accuracy_score, balanced_accuracy_score, f1_score
-from sklearn.model_selection import cross_val_score
+from sklearn.metrics import accuracy_score, f1_score
 
 from fsga.analysis.baselines import get_baseline_selector
 from fsga.core.genetic_algorithm import GeneticAlgorithm
@@ -45,7 +43,7 @@ class ExperimentRunner:
         model_type: str = "rf",
         n_runs: int = 10,
         random_state: int = 42,
-        results_dir: Optional[Path | str] = None,
+        results_dir: Path | str | None = None,
     ):
         """Initialize experiment runner.
 
@@ -179,7 +177,7 @@ class ExperimentRunner:
         return ga_results
 
     def run_baseline_experiment(
-        self, method: str = "rfe", k: Optional[int] = None, verbose: bool = False
+        self, method: str = "rfe", k: int | None = None, verbose: bool = False
     ) -> dict:
         """Run baseline feature selection method.
 
