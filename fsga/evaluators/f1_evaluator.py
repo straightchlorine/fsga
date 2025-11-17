@@ -42,7 +42,7 @@ class F1Evaluator(Evaluator):
         X_val: np.ndarray,
         y_val: np.ndarray,
         model,
-        average: str = "weighted"
+        average: str = "weighted",
     ):
         """Initialize F1 evaluator.
 

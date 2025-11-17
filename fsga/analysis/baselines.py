@@ -4,7 +4,6 @@ Implements RFE, LASSO, Mutual Information, and Chi-squared feature selection
 to compare against the GA approach.
 """
 
-
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_selection import RFE as SklearnRFE
@@ -397,8 +396,7 @@ def get_baseline_selector(method: str, **kwargs) -> BaselineSelector:
     method_lower = method.lower()
     if method_lower not in selectors:
         raise ValueError(
-            f"Unknown baseline method: {method}. "
-            f"Available: {list(selectors.keys())}"
+            f"Unknown baseline method: {method}. Available: {list(selectors.keys())}"
         )
 
     # Map 'k' parameter to the correct parameter name for each selector

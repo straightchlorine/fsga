@@ -52,13 +52,11 @@ class ElitismSelector(Selector):
         """
         # Sort population by fitness (descending)
         sorted_population = sorted(
-            self.population,
-            key=lambda c: self.evaluator.evaluate(c),
-            reverse=True
+            self.population, key=lambda c: self.evaluator.evaluate(c), reverse=True
         )
 
         # Return top n_elite individuals
-        elite = sorted_population[:self.n_elite]
+        elite = sorted_population[: self.n_elite]
 
         # Ensure we return exactly 2 (pad with best if needed)
         while len(elite) < 2:

@@ -40,9 +40,7 @@ class Evaluator(ABC):
             Must handle edge case where all genes are 0 (no features selected).
             Typically return 0.0 or small penalty in this case.
         """
-        raise NotImplementedError(
-            "Method 'evaluate' must be implemented in a subclass."
-        )
+        raise NotImplementedError("Method 'evaluate' must be implemented in a subclass.")
 
     def __str__(self):
         return f"{self.__class__.__name__}"

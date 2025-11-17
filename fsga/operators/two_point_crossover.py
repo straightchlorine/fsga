@@ -63,19 +63,17 @@ class TwoPointCrossover(Crossover):
             raise ValueError("Parent size must be at least 3 for two-point crossover.")
 
         # Pick two random crossover points and sort them
-        point1, point2 = sorted(np.random.choice(range(1, parent_a.size), size=2, replace=False))
+        point1, point2 = sorted(
+            np.random.choice(range(1, parent_a.size), size=2, replace=False)
+        )
 
         # Create children by swapping middle segment
-        child_1 = np.concatenate([
-            parent_a[:point1],
-            parent_b[point1:point2],
-            parent_a[point2:]
-        ])
-        child_2 = np.concatenate([
-            parent_b[:point1],
-            parent_a[point1:point2],
-            parent_b[point2:]
-        ])
+        child_1 = np.concatenate(
+            [parent_a[:point1], parent_b[point1:point2], parent_a[point2:]]
+        )
+        child_2 = np.concatenate(
+            [parent_b[:point1], parent_a[point1:point2], parent_b[point2:]]
+        )
 
         genes = [child_1, child_2]
 

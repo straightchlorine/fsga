@@ -293,7 +293,8 @@ class GeneticAlgorithm:
             "diversity_history": self.diversity,
             "optimal_generation": self.optimal_generation,
             "execution_time_ms": timer.interval,
-            "converged": no_improvement_count >= (self._early_stopping_patience or float("inf")),
+            "converged": no_improvement_count
+            >= (self._early_stopping_patience or float("inf")),
         }
 
     def new_generation(self, current_generation: int) -> Population:

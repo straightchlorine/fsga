@@ -31,9 +31,7 @@ class Crossover(ABC):
         self.dev = dev
 
     @abstractmethod
-    def crossover(
-        self, parent1: np.ndarray, parent2: np.ndarray
-    ) -> np.ndarray:
+    def crossover(self, parent1: np.ndarray, parent2: np.ndarray) -> np.ndarray:
         """Perform crossover to generate offspring.
 
         Args:

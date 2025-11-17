@@ -43,7 +43,7 @@ class BalancedAccuracyEvaluator(Evaluator):
         X_val: np.ndarray,
         y_val: np.ndarray,
         model,
-        adjusted: bool = False
+        adjusted: bool = False,
     ):
         """Initialize balanced accuracy evaluator.
 
@@ -98,11 +98,7 @@ class BalancedAccuracyEvaluator(Evaluator):
             y_pred = self.model.predict(X_val_subset)
 
             # Calculate balanced accuracy
-            bal_acc = balanced_accuracy_score(
-                self.y_val,
-                y_pred,
-                adjusted=self.adjusted
-            )
+            bal_acc = balanced_accuracy_score(self.y_val, y_pred, adjusted=self.adjusted)
             return float(bal_acc)
 
         except Exception as e:

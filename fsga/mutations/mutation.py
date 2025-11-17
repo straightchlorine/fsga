@@ -45,9 +45,7 @@ class Mutation(ABC):
         Note:
             Must not modify input population (copy first).
         """
-        raise NotImplementedError(
-            "Method 'mutate' must be implemented in a subclass."
-        )
+        raise NotImplementedError("Method 'mutate' must be implemented in a subclass.")
 
     @property
     def probability(self) -> float:

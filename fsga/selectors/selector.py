@@ -34,9 +34,7 @@ class Selector(ABC):
         Raises:
             NotImplementedError: Must be implemented by subclass
         """
-        raise NotImplementedError(
-            "Method 'select' must be implemented in a subclass."
-        )
+        raise NotImplementedError("Method 'select' must be implemented in a subclass.")
 
     @property
     def population(self) -> np.ndarray:

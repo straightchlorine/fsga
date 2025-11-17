@@ -36,10 +36,7 @@ class RankingSelector(Selector):
     """
 
     def __init__(
-        self,
-        evaluator: Evaluator,
-        scale_factor: float = 1.5,
-        number_of_parents: int = 2
+        self, evaluator: Evaluator, scale_factor: float = 1.5, number_of_parents: int = 2
     ):
         """Initialize ranking selector.
 
@@ -65,9 +62,7 @@ class RankingSelector(Selector):
             ValueError: If population is not set or empty
         """
         # Evaluate all chromosomes
-        fitness_scores = np.array([
-            self.evaluator.evaluate(c) for c in self.population
-        ])
+        fitness_scores = np.array([self.evaluator.evaluate(c) for c in self.population])
 
         # Rank chromosomes (higher fitness = lower rank number)
         # argsort(-fitness) gives indices that would sort fitness descending
@@ -81,9 +76,7 @@ class RankingSelector(Selector):
 
         # Select parents based on probabilities
         selected_indices = np.random.choice(
-            len(self.population),
-            size=self.number_of_parents,
-            p=probabilities
+            len(self.population), size=self.number_of_parents, p=probabilities
         )
 
         parents = [self.population[i] for i in selected_indices]

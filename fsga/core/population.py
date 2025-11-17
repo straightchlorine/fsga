@@ -8,7 +8,6 @@ Key changes:
 - Simplified interface (no dataset dependency)
 """
 
-
 import numpy as np
 
 from fsga.selectors.selector import Selector
@@ -99,11 +98,7 @@ class Population:
         """
         return (np.random.random(self.num_features) < density).astype(int)
 
-    def initialize_population(
-        self,
-        strategy: str = "random",
-        **kwargs
-    ):
+    def initialize_population(self, strategy: str = "random", **kwargs):
         """Initialize population using specified strategy.
 
         Args:
@@ -133,8 +128,7 @@ class Population:
 
         if strategy not in strategies:
             raise ValueError(
-                f"Unknown strategy: {strategy}. "
-                f"Available: {list(strategies.keys())}"
+                f"Unknown strategy: {strategy}. Available: {list(strategies.keys())}"
             )
 
         # Generate population
@@ -200,7 +194,9 @@ class Population:
 
         # Initialize if empty
         if not hasattr(self, "chromosomes") or self.chromosomes.size == 0:
-            self.chromosomes = np.empty((0, chromosomes.shape[1]), dtype=chromosomes.dtype)
+            self.chromosomes = np.empty(
+                (0, chromosomes.shape[1]), dtype=chromosomes.dtype
+            )
 
         # Add to population
         self.chromosomes = np.vstack([self.chromosomes, chromosomes])

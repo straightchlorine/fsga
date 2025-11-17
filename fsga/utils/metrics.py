@@ -4,7 +4,6 @@ Includes stability metrics (Jaccard index), effect size calculations (Cohen's d)
 and convergence detection utilities.
 """
 
-
 import numpy as np
 from scipy import stats
 

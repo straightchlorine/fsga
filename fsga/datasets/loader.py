@@ -3,7 +3,6 @@
 Provides easy access to sklearn datasets with train/test splitting.
 """
 
-
 import numpy as np
 from sklearn.datasets import load_breast_cancer, load_digits, load_iris, load_wine
 from sklearn.model_selection import train_test_split
@@ -16,7 +15,11 @@ def load_dataset(
     val_size: float | None = None,
     stratify: bool = True,
     random_state: int = 42,
-) -> tuple[np.ndarray, np.ndarray, list] | tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, list] | tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, list]:
+) -> (
+    tuple[np.ndarray, np.ndarray, list]
+    | tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, list]
+    | tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, list]
+):
     """Load dataset from sklearn.
 
     Args:
@@ -58,9 +61,7 @@ def load_dataset(
     }
 
     if name not in loaders:
-        raise ValueError(
-            f"Unknown dataset: {name}. Available: {list(loaders.keys())}"
-        )
+        raise ValueError(f"Unknown dataset: {name}. Available: {list(loaders.keys())}")
 
     # Load data
     data = loaders[name]()

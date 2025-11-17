@@ -84,7 +84,9 @@ class ExperimentRunner:
             dict: Aggregated results from all runs
         """
         if verbose:
-            logger.info(f"Running GA experiment on {self.dataset_name} ({self.n_runs} runs)")
+            logger.info(
+                f"Running GA experiment on {self.dataset_name} ({self.n_runs} runs)"
+            )
 
         all_chromosomes = []
         all_accuracies = []
@@ -375,13 +377,15 @@ class ExperimentRunner:
                     f"  {method_name} Mean: {comparisons[method_name]['baseline_mean']:.4f}"
                 )
                 logger.info(
-                    f"  Improvement: {comparisons[method_name]['improvement']:.4f} ({comparisons[method_name]['improvement']*100:.2f}%)"
+                    f"  Improvement: {comparisons[method_name]['improvement']:.4f} ({comparisons[method_name]['improvement'] * 100:.2f}%)"
                 )
                 logger.info(f"  p-value: {comparisons[method_name]['p_value']:.4f}")
                 logger.info(
                     f"  Significant: {'Yes' if comparisons[method_name]['significant'] else 'No'}"
                 )
-                logger.info(f"  Effect Size (Cohen's d): {comparisons[method_name]['effect_size']:.3f}")
+                logger.info(
+                    f"  Effect Size (Cohen's d): {comparisons[method_name]['effect_size']:.3f}"
+                )
 
         return comparisons
 
@@ -434,11 +438,19 @@ class ExperimentRunner:
         report.append("-" * 80)
 
         for method_name, results in self.results.items():
-            acc = f"{results['mean_accuracy']:.4f} ± {results.get('std_accuracy', 0):.4f}"
+            acc = (
+                f"{results['mean_accuracy']:.4f} ± {results.get('std_accuracy', 0):.4f}"
+            )
             f1 = f"{results['mean_f1']:.4f}"
-            n_feat = f"{results.get('mean_n_features', results.get('n_features', 'N/A')):.1f}"
+            n_feat = (
+                f"{results.get('mean_n_features', results.get('n_features', 'N/A')):.1f}"
+            )
             runtime = f"{results['mean_runtime']:.3f}"
-            stability = f"{results.get('stability', 'N/A'):.3f}" if results.get('stability') else "N/A"
+            stability = (
+                f"{results.get('stability', 'N/A'):.3f}"
+                if results.get("stability")
+                else "N/A"
+            )
 
             report.append(
                 f"{method_name:<15} {acc:<12} {f1:<12} {n_feat:<10} {runtime:<12} {stability:<10}"

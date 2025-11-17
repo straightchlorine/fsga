@@ -58,9 +58,7 @@ class RouletteSelector(Selector):
             If all fitness scores are non-positive, shifts them to be positive.
         """
         # Evaluate all chromosomes
-        fitness_scores = np.array([
-            self.evaluator.evaluate(c) for c in self.population
-        ])
+        fitness_scores = np.array([self.evaluator.evaluate(c) for c in self.population])
 
         # Handle non-positive fitness (shift to make all positive)
         if (fitness_scores <= 0).all():
@@ -71,9 +69,7 @@ class RouletteSelector(Selector):
 
         # Select parents based on probabilities
         selected_indices = np.random.choice(
-            len(self.population),
-            size=self.number_of_parents,
-            p=probabilities
+            len(self.population), size=self.number_of_parents, p=probabilities
         )
 
         parents = [self.population[i] for i in selected_indices]

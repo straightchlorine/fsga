@@ -153,10 +153,7 @@ class ExperimentLogger:
         # Add any additional metrics
         log_entry.update(kwargs)
 
-        msg = (
-            f"Gen {generation}: best={best_fitness:.4f}, "
-            f"avg={avg_fitness:.4f}"
-        )
+        msg = f"Gen {generation}: best={best_fitness:.4f}, avg={avg_fitness:.4f}"
         if num_features is not None:
             msg += f", features={num_features}"
 
@@ -382,7 +379,10 @@ class ProgressTracker:
         msg = f"\r{self.desc}: {current}/{self.total} ({percent:.1f}%) | {elapsed:.1f}s"
 
         if metrics:
-            metric_str = " | ".join(f"{k}={v:.4f}" if isinstance(v, float) else f"{k}={v}" for k, v in metrics.items())
+            metric_str = " | ".join(
+                f"{k}={v:.4f}" if isinstance(v, float) else f"{k}={v}"
+                for k, v in metrics.items()
+            )
             msg += f" | {metric_str}"
 
         print(msg, end="", flush=True)
