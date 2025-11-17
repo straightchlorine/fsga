@@ -1,0 +1,182 @@
+site_name: FSGA - Feature Selection via Genetic Algorithm
+site_description: Framework for automated feature selection using Genetic Algorithms
+site_author: Piotr Krzysztof Lis
+site_url: https://straightchlorine.github.io/fsga
+
+repo_name: straightchlorine/feature-selection-via-genetic-algorithm
+repo_url: https://github.com/straightchlorine/feature-selection-via-genetic-algorithm
+edit_uri: edit/master/docs/
+
+copyright: Copyright &copy; 2025 Piotr Krzysztof Lis
+
+theme:
+  name: material
+  language: en
+  palette:
+    # Light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: deep purple
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: deep purple
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - navigation.footer
+    - toc.follow
+    - toc.integrate
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+
+  icon:
+    repo: fontawesome/brands/github
+    admonition:
+      note: octicons/tag-16
+      abstract: octicons/checklist-16
+      info: octicons/info-16
+      tip: octicons/squirrel-16
+      success: octicons/check-16
+      question: octicons/question-16
+      warning: octicons/alert-16
+      failure: octicons/x-circle-16
+      danger: octicons/zap-16
+      bug: octicons/bug-16
+      example: octicons/beaker-16
+      quote: octicons/quote-16
+
+plugins:
+  - search:
+      lang: en
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: google
+            show_source: true
+            show_root_heading: true
+            show_category_heading: true
+            members_order: source
+            heading_level: 2
+  - awesome-pages
+  - git-revision-date-localized:
+      enable_creation_date: true
+      type: timeago
+
+markdown_extensions:
+  # Python Markdown
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+      toc_depth: 3
+
+  # Python Markdown Extensions
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/straightchlorine
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/fsga/
+
+  version:
+    provider: mike
+    default: latest
+
+extra_css:
+  - stylesheets/extra.css
+
+extra_javascript:
+  - javascripts/mathjax.js
+  - https://polyfill.io/v3/polyfill.min.js?features=es6
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Installation: getting-started/installation.md
+      - Quick Start: getting-started/quickstart.md
+      - Tutorial: getting-started/tutorial.md
+  - User Guide:
+      - Architecture: user-guide/architecture.md
+      - Core Components: user-guide/core.md
+      - Operators: user-guide/operators.md
+      - Evaluators: user-guide/evaluators.md
+      - Experiment Runner: user-guide/experiments.md
+      - Visualization: user-guide/visualization.md
+  - API Reference:
+      - Core: api/core.md
+      - Operators: api/operators.md
+      - Mutations: api/mutations.md
+      - Selectors: api/selectors.md
+      - Evaluators: api/evaluators.md
+      - ML: api/ml.md
+      - Datasets: api/datasets.md
+      - Analysis: api/analysis.md
+      - Visualization: api/visualization.md
+      - Utils: api/utils.md
+  - Examples:
+      - Basic Usage: examples/basic.md
+      - Custom Operators: examples/custom-operators.md
+      - Multi-Objective: examples/multi-objective.md
+      - Large Datasets: examples/large-datasets.md
+  - Development:
+      - Contributing: development/contributing.md
+      - Testing: development/testing.md
+      - Roadmap: development/roadmap.md
+  - About:
+      - Project Plan: about/project-plan.md
+      - License: about/license.md
+      - Changelog: about/changelog.md
