@@ -1,17 +1,16 @@
 # Visualization Module
 
-**Purpose**: Publication-quality plotting functions for GA analysis, method comparison, and result visualization.
+**Purpose**: Plotting functions for GA analysis, method comparison, and result visualization.
 
 ## Overview
 
-This module provides 9 comprehensive plotting functions designed for academic publication and technical analysis. All plots support 300 DPI export, consistent styling, and optional display control.
+This module provides 9 plotting functions for visualizing GA behavior and comparing methods. All plots support 300 DPI export and consistent styling.
 
-## Core Design Principles
+## Design Principles
 
-1. **Publication-Ready**: 300 DPI PNG export, clean typography, professional styling
-2. **Comprehensive**: Cover all aspects of GA behavior (fitness, diversity, features, comparison)
+1. **Clean output**: 300 DPI PNG export, consistent styling
+2. **Coverage**: Fitness, diversity, features, and method comparison
 3. **Flexible**: Optional parameters for customization
-4. **Consistent**: Unified color schemes and formatting across all plots
 
 ## Plot Functions
 
@@ -148,7 +147,7 @@ plot_feature_frequency(
 ---
 
 #### `plot_combined_dashboard()`
-3-panel comprehensive view: fitness + diversity + feature frequency.
+3-panel view: fitness + diversity + feature frequency.
 
 **Use Case**: Single-figure summary of GA behavior for papers/presentations.
 
@@ -209,8 +208,7 @@ plot_method_comparison(
 
 ---
 
-#### `plot_feature_count_comparison()` ⭐ NEW
-Box plots comparing number of features selected.
+#### `plot_feature_count_comparison()`Box plots comparing number of features selected.
 
 **Use Case**: Show feature reduction, sparsity comparison.
 
@@ -230,21 +228,20 @@ plot_feature_count_comparison(
 )
 ```
 
-**Critical**: This plot shows the MAIN value proposition of feature selection!
+This plot shows the feature reduction achieved by each method.
 
 ---
 
-#### `plot_multi_metric_comparison()` ⭐ NEW
-2×2 grid: Accuracy + Feature Count + Runtime + Stability.
+#### `plot_multi_metric_comparison()`2×2 grid: Accuracy + Feature Count + Runtime + Stability.
 
-**Use Case**: Comprehensive method comparison in single figure.
+**Use Case**: All metrics in a single figure.
 
 ```python
 from fsga.visualization import plot_multi_metric_comparison
 
 plot_multi_metric_comparison(
     runner.results,  # From ExperimentRunner
-    title="Comprehensive Comparison: Iris",
+    title="Comparison: Iris",
     save_path="multi_metric.png"
 )
 ```
@@ -266,8 +263,7 @@ plot_multi_metric_comparison(
 
 ---
 
-#### `plot_accuracy_vs_sparsity()` ⭐ NEW
-Scatter plot showing accuracy-sparsity trade-off.
+#### `plot_accuracy_vs_sparsity()`Scatter plot showing accuracy-sparsity trade-off.
 
 **Use Case**: Visualize Pareto frontier, show GA finds optimal balance.
 
@@ -363,28 +359,27 @@ fsga/visualization/
 | `plot_convergence()` | Diagnostics | Early stopping validation | Low |
 | `plot_feature_frequency()` | Analysis | Core feature identification | High |
 | `plot_combined_dashboard()` | Summary | Complete single-run view | High |
-| `plot_method_comparison()` | Comparison | Accuracy comparison | Critical |
-| `plot_feature_count_comparison()` | Comparison | Feature reduction | **Critical** |
-| `plot_multi_metric_comparison()` | Comparison | All metrics at once | **Critical** |
+| `plot_method_comparison()` | Comparison | Accuracy comparison | High |
+| `plot_feature_count_comparison()` | Comparison | Feature reduction | High |
+| `plot_multi_metric_comparison()` | Comparison | All metrics at once | High |
 | `plot_accuracy_vs_sparsity()` | Comparison | Trade-off visualization | High |
 
 ## Best Practices
 
-### For Academic Papers
-1. Use `plot_multi_metric_comparison()` for main results (shows all dimensions)
-2. Use `plot_accuracy_vs_sparsity()` to show Pareto optimality
-3. Use `plot_feature_frequency()` for domain insights (which features matter)
-4. All plots at 300 DPI for publication quality
+### For the report
+1. `plot_multi_metric_comparison()` for main results (shows all dimensions)
+2. `plot_accuracy_vs_sparsity()` for the accuracy-sparsity trade-off
+3. `plot_feature_frequency()` for which features get selected
+4. All plots export at 300 DPI
 
-### For Presentations
-1. Use `plot_combined_dashboard()` for executive summary
-2. Use `plot_method_comparison()` for simple accuracy comparison
-3. Use `plot_fitness_evolution()` to explain GA optimization
+### For presentations
+1. `plot_combined_dashboard()` for a single-figure summary
+2. `plot_method_comparison()` for accuracy comparison
+3. `plot_fitness_evolution()` to explain GA optimization
 
-### For Technical Reports
-1. Include all 9 plot types for comprehensive documentation
-2. Use `show=False, save_path="..."` to batch-generate figures
-3. Organize in subdirectories: `results/{dataset}/plots/`
+### Batch generation
+1. Use `show=False, save_path="..."` to generate figures without displaying
+2. Organize in subdirectories: `results/{dataset}/plots/`
 
 ## Common Issues
 

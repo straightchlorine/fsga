@@ -1,336 +1,176 @@
 # CLAUDE.md - AI Collaboration Context
 
-This document provides context for AI assistants (Claude, GPT, etc.) working on this project.
+This document provides context for AI assistants working on this project.
 
-### Origin Story
+## Project Overview
 
-This project was conceived during a conversation about creating a university ML project.
-Quite a bit of code comes straight from ([knapsach-problem](https://github.com/straightchlorine/knapsack-problem/))  repository.
+University ML project: feature selection using a genetic algorithm. Adapted from a prior
+[knapsack-problem](https://github.com/straightchlorine/knapsack-problem/) GA codebase,
+reusing ~80% of the GA components (binary chromosomes, operators, selectors) and adding
+ML fitness evaluation on top.
 
-1. Leverage that proven codebase
-2. Create something ML-related for a university assignment
-3. Build something "intricate" rather than basic
-
-After analyzing the knapsack GA codebase (~2,424 lines of Python with clean OOP architecture), we decided on **Feature Selection via Genetic Algorithm** because:
-- Reuses 80% of existing GA components (binary chromosomes, same operators)
-- Clear ML connection (improves model performance)
-- Intricate enough for academic distinction
-- Fast to implement with existing foundation
+**Python**: >=3.13
+**Dependencies**: numpy, pandas, scikit-learn, matplotlib, seaborn, pyyaml, scipy
+**Tests**: pytest, 280+ tests, 82% coverage
+**Linting**: ruff
 
 ---
 
-## Architecture Philosophy
-
-### Design Principles
-
-1. **Code Reuse**: Adapt proven GA components from knapsack project rather than rebuild from scratch
-2. **Modularity**: Each component (selector, operator, evaluator) is independent and swappable
-3. **Extensibility**: Easy to add new operators, datasets, or ML models
-4. **Production-Ready**: Not just a prototype - includes logging, config, testing, serialization
-5. **Academic Rigor**: Statistical tests, comprehensive benchmarking, publication-quality visualizations
-
-### Key Innovations Beyond Knapsack Project
-
-| Component | Knapsack Version | FSGA Enhancement |
-|-----------|------------------|------------------|
-| **Fitness** | Maximize value within capacity constraint | Train ML model, return accuracy/F1 on validation set |
-| **Chromosome** | Binary (1=item included) | Binary (1=feature selected) - same representation! |
-| **Initialization** | Value-biased, weight-constrained | Correlation-biased, mutual information-based |
-| **Selection** | Single-objective (maximize value) | Multi-objective (accuracy + sparsity via NSGA-II) |
-| **Mutation** | Uniform bit-flip | Feature-aware (higher rate for correlated features) |
-| **Operators** | Static rates | Adaptive (adjust based on population diversity) |
-| **Evaluation** | O(n) calculation | O(n × train_time) - ML model training bottleneck |
-
----
-
-## Project Structure Rationale
+## Project Structure
 
 ```
 fsga/
-├── core/           # GA engine - adapted from knapsack/genetic_algorithm.py, knapsack/population.py
-├── operators/      # Crossover - ported from knapsack/operators/
-├── mutations/      # Mutation - ported from knapsack/mutations/
-├── selectors/      # Selection - ported from knapsack/selectors/ + new NSGA-II
-├── evaluators/     # NEW: ML fitness functions (replaces knapsack/evaluators/fitness.py)
-├── ml/             # NEW: Model wrappers, CV strategies, preprocessing
-├── datasets/       # NEW: ML dataset loaders (replaces knapsack/dataset.py)
-├── analysis/       # Enhanced from knapsack/analyze/
-├── visualization/  # Enhanced from knapsack/visualization/
-└── utils/          # Config, metrics, logging (new)
+├── core/           # GA engine (genetic_algorithm.py, population.py)
+├── operators/      # Crossover: uniform, single-point, two-point, multi-point
+├── mutations/      # Mutation: bitflip
+├── selectors/      # Selection: tournament, roulette, ranking, elitism
+├── evaluators/     # Fitness: accuracy, F1, balanced accuracy
+├── ml/             # ModelWrapper (sklearn integration)
+├── datasets/       # Dataset loaders (iris, wine, breast_cancer, digits)
+├── analysis/       # Baselines + ExperimentRunner
+├── visualization/  # 9 plot functions
+└── utils/          # Config, metrics, logging, serialization
 ```
 
-### Why This Structure?
+Other key paths:
+- `tests/` -- 15 test files (pytest)
+- `experiments/run_experiment.py` -- main experiment script
+- `configs/` -- YAML configs (default, quick_test, high_dimensional, production)
+- `report/` -- LaTeX report (untracked, not committed)
+- `docs/` -- MkDocs documentation site
 
-- **Separation of Concerns**: GA logic (`core/`, `operators/`, etc.) is independent of ML logic (`ml/`, `evaluators/`)
-- **Testability**: Each module can be tested in isolation
-- **Reusability**: Operators work with any fitness function, evaluators work with any model
-- **Academic Presentation**: Clear module boundaries make it easy to explain in reports/presentations
+### Design
+
+- **Strategy pattern**: operators, selectors, evaluators are all injected into GeneticAlgorithm
+- **Separation of concerns**: GA logic is independent of ML logic
+- Each module has its own README with usage examples and extension guide
+
+### What changed from knapsack
+
+| Component | Knapsack | FSGA |
+|-----------|----------|------|
+| Fitness | Maximize value within capacity | Train ML model, return accuracy/F1 |
+| Chromosome | Binary (1=item included) | Binary (1=feature selected) -- same |
+| Evaluation | O(n) calculation | O(n x train_time) -- ML training bottleneck |
 
 ---
 
 ## Code Style & Conventions
 
-### Inherited from Knapsack Project
+### Ruff configuration (pyproject.toml)
 
-```python
-# Class naming
-class TournamentSelector(Selector):  # PascalCase for classes
-    pass
-
-# Method naming
-def evaluate(self, chromosome):  # snake_case for methods
-    pass
-
-# Property pattern (used extensively in knapsack)
-@property
-def population_size(self):
-    return self._population_size
-
-@population_size.setter
-def population_size(self, size):
-    self._population_size = size
-```
-
-### New Conventions for FSGA
-
-```python
-# Type hints (add these - knapsack didn't have many)
-def evaluate(self, chromosome: np.ndarray) -> float:
-    pass
-
-# Docstring format (use Google style)
-def select_parents(self) -> tuple[np.ndarray, np.ndarray]:
-    """Select two parents from the population.
-
-    Returns:
-        tuple: Two parent chromosomes as numpy arrays.
-
-    Raises:
-        ValueError: If population size is less than 2.
-    """
-```
-
-### Ruff Configuration
-
-Use the same ruff config from knapsack (`pyproject.toml`):
 ```toml
 [tool.ruff]
 line-length = 89
 indent-width = 4
+target-version = "py313"
 
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"
 ```
 
----
+### Naming
 
-## Testing Strategy
+- PascalCase for classes: `TournamentSelector(Selector)`
+- snake_case for methods/functions: `def evaluate(self, chromosome)`
+- Property pattern from knapsack used throughout (`@property` + `@x.setter`)
 
-### Unit Tests
+### Type hints and docstrings
 
-Each module needs tests:
-```python
-# tests/test_operators.py
-def test_uniform_crossover_produces_valid_offspring():
-    parent1 = np.array([1, 1, 0, 0])
-    parent2 = np.array([0, 1, 1, 0])
-    crossover = UniformCrossover()
-    child1, child2 = crossover.crossover(parent1, parent2)
-    assert all(gene in [0, 1] for gene in child1)
-    assert all(gene in [0, 1] for gene in child2)
-```
-
-### Integration Tests
-
-```python
-# tests/test_end_to_end.py
-def test_ga_runs_on_iris():
-    X, y = load_iris(return_X_y=True)
-    # ... run GA, assert fitness > threshold
-```
-
-### Coverage Target
-
-80%+ coverage (knapsack had good coverage, maintain that standard)
+- Type hints on function signatures
+- Google-style docstrings
 
 ---
 
-## Common Pitfalls to Avoid
+## Testing
 
-### From Knapsack Experience
+```bash
+uv run pytest tests/ -v
+uv run pytest tests/ --cov=fsga --cov-report=html
+```
 
-1. **Don't mutate inputs**: Always copy chromosomes before modifying
-   ```python
-   # BAD
-   def mutate(self, chromosome):
-       chromosome[i] = 1 - chromosome[i]  # Modifies original!
+- Unit tests for each operator/selector/evaluator
+- Integration tests for full GA workflows
+- Edge case tests (empty features, single sample, etc.)
+- 80%+ coverage target
 
-   # GOOD
-   def mutate(self, chromosome):
-       mutated = chromosome.copy()
-       mutated[i] = 1 - mutated[i]
-       return mutated
-   ```
+---
 
-2. **Validate population size**: Tournament size can't exceed population size
-   ```python
-   if self.tournament_size > len(self.population):
-       raise ValueError("Tournament size too large")
-   ```
+## Common Pitfalls
 
-3. **Handle edge cases**: Empty feature selection, single feature, etc.
-
-### ML-Specific Pitfalls
-
-1. **Data Leakage**: Never use test set for fitness evaluation
-   ```python
-   # BAD
-   accuracy = model.score(X_test, y_test)  # Leakage!
-
-   # GOOD
-   accuracy = cross_val_score(model, X_train, y_train, cv=5).mean()
-   ```
-
-2. **Random Seeds**: Set seeds for reproducibility
-   ```python
-   model = RandomForestClassifier(random_state=42)
-   np.random.seed(42)
-   ```
-
-3. **Class Imbalance**: Use balanced accuracy or F1 for imbalanced datasets
+1. **Don't mutate inputs** -- always copy chromosomes before modifying
+2. **Validate population size** -- tournament size can't exceed population size
+3. **Handle edge cases** -- empty feature selection, single feature, etc.
+4. **Data leakage** -- never use test set for fitness evaluation; use cross-validation on training set
+5. **Random seeds** -- set seeds for reproducibility
+6. **Class imbalance** -- use balanced accuracy or F1 for imbalanced datasets
 
 ---
 
 ## Experiment Design
 
-### Baseline Comparisons
+### Baselines compared against
 
-Must compare against:
-1. **All features** (no selection)
-2. **Recursive Feature Elimination (RFE)** - sklearn wrapper method
-3. **LASSO** (L1) - embedded method
-4. **Mutual Information** - filter method
+1. All features (no selection)
+2. RFE (Recursive Feature Elimination)
+3. LASSO (L1 regularization)
+4. Mutual Information filter
 
-### Metrics to Report
+### Metrics reported
 
-| Metric | Purpose |
-|--------|---------|
-| Accuracy | Primary objective |
-| F1-Score | For imbalanced datasets |
-| # Features Selected | Sparsity measure |
-| Computation Time | Efficiency |
-| Stability | Feature selection consistency across runs |
-| Statistical Significance | p-value from Wilcoxon test |
+- Accuracy, F1-Score
+- Number of features selected
+- Computation time
+- Stability (Jaccard index across runs)
+- Statistical significance (Wilcoxon test, Cohen's d)
 
-### Reproducibility Checklist
+### Tested results
 
-- [ ] Set random seeds (numpy, sklearn, Python)
-- [ ] Save config files (YAML) with experiments
-- [ ] Log all hyperparameters
-- [ ] Version dataset splits (save train/test indices)
-- [ ] Record library versions (`pip freeze`)
+| Dataset | GA Accuracy | Features Used | vs All Features |
+|---------|-------------|---------------|-----------------|
+| Breast Cancer | 98.3% | 12/30 (40%) | +2.6% |
+| Iris | 98.3% | 2/4 (50%) | +6.2% |
+| Wine | 100% | 6.5/13 (50%) | +1.4% |
 
 ---
 
-## Documentation Standards
+## Guidelines for AI Assistants
 
-### Module READMEs
+### Do
 
-Each module should have:
-1. **Purpose**: What problem does this module solve?
-2. **Components**: List of classes/functions
-3. **Usage Example**: Minimal working code
-4. **Extension Guide**: How to add new implementations
+- Maintain consistency with knapsack project structure
+- Add type hints and docstrings
+- Write tests alongside implementation
+- Use meaningful variable names (`chromosome`, not `x`)
+- Preserve the property pattern from knapsack code
+- Check if functionality exists in knapsack before reimplementing
 
-### Code Documentation
+### Don't
 
-```python
-class AccuracyEvaluator(Evaluator):
-    """Evaluates feature subsets using classification accuracy.
+- Don't break existing abstractions (Evaluator, Selector, etc.)
+- Don't add external dependencies without justification
+- Don't sacrifice code clarity for minor performance gains
+- Don't skip edge case handling (empty features, single sample, etc.)
 
-    Trains a classifier on selected features and returns validation accuracy
-    as the fitness score. Supports cross-validation for robust evaluation.
+### When adding new features
 
-    Attributes:
-        model: sklearn-compatible classifier
-        X_train: Training feature matrix
-        y_train: Training labels
-        X_val: Validation feature matrix
-        y_val: Validation labels
-        cv_folds: Number of cross-validation folds (default: 5)
-
-    Example:
-        >>> from sklearn.ensemble import RandomForestClassifier
-        >>> model = RandomForestClassifier(random_state=42)
-        >>> evaluator = AccuracyEvaluator(X_train, y_train, X_val, y_val, model)
-        >>> fitness = evaluator.evaluate(chromosome)
-    """
-```
+1. Check docs/about/project-plan.md for design decisions
+2. Follow existing patterns
+3. Update relevant READMEs
+4. Add tests (unit + integration if applicable)
 
 ---
 
-## Future Extensions (Post-MVP)
+## Glossary
 
-Ideas for enhancement after core functionality is complete:
-
-1. **Deep Learning Integration**: Keras/PyTorch models
-2. **Regression Support**: Currently classification-only
-3. **Feature Engineering**: GA evolves feature transformations (log, sqrt, interactions)
-4. **Ensemble GA**: Run multiple GAs, combine results
-5. **Interactive Dashboard**: Streamlit app for real-time visualization
-6. **Distributed Computing**: Ray/Dask for large-scale experiments
-7. **AutoML Integration**: Compare against TPOT, Auto-sklearn
-
----
-
-## AI Assistant Guidelines
-
-When working on this project:
-
-### Do's
-✅ Maintain consistency with knapsack project structure
-✅ Add type hints and comprehensive docstrings
-✅ Write tests alongside implementation
-✅ Use meaningful variable names (e.g., `chromosome`, not `x`)
-✅ Preserve the property pattern from knapsack code
-✅ Check if functionality exists in knapsack before reimplementing
-
-### Don'ts
-❌ Don't break existing abstractions (Evaluator, Selector, etc.)
-❌ Don't add external dependencies without justification
-❌ Don't sacrifice code clarity for minor performance gains
-❌ Don't skip edge case handling (empty features, single sample, etc.)
-❌ Don't modify knapsack source code (copy and adapt instead)
-
-### When Porting from Knapsack
-
-1. **Read the original implementation first** (understand before copying)
-2. **Identify what changes** (dataset → ML data, fitness → model accuracy)
-3. **Preserve the interface** (method signatures, property patterns)
-4. **Update docstrings** (reflect ML context, not knapsack)
-5. **Add ML-specific validation** (e.g., check X/y dimensions match)
-
-### When Adding New Features
-
-1. **Check PROJECT_PLAN.md** for design decisions
-2. **Follow existing patterns** (see how similar features work)
-3. **Update relevant READMEs** (module + main)
-4. **Add tests** (unit + integration if applicable)
-5. **Update CLAUDE.md** (document decisions made)
-
----
-
-## Glossary (For AI Context)
-
-| Term | Meaning in This Project |
-|------|-------------------------|
+| Term | Meaning |
+|------|---------|
 | **Chromosome** | Binary array where `chromosome[i]=1` means "include feature i" |
 | **Fitness** | ML model performance (accuracy/F1) on validation set |
-| **Generation** | One iteration of the GA (selection → crossover → mutation) |
+| **Generation** | One iteration of the GA (selection -> crossover -> mutation) |
 | **Population** | Collection of chromosomes (candidate feature subsets) |
-| **Pareto Frontier** | Set of non-dominated solutions in multi-objective optimization |
-| **Feature Sparsity** | Fraction of features NOT selected (1 - num_features/total_features) |
-| **Wrapper Method** | Feature selection using ML model performance (what we're building) |
+| **Feature Sparsity** | Fraction of features NOT selected |
+| **Wrapper Method** | Feature selection using ML model performance (what this project does) |
 | **Filter Method** | Feature selection using statistical tests (mutual info, chi-squared) |
 | **Embedded Method** | Feature selection built into model (LASSO, tree importance) |

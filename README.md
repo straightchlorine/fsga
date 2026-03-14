@@ -1,6 +1,6 @@
 # Feature Selection via Genetic Algorithm (FSGA)
 
-A production-ready framework for automated feature selection using Genetic Algorithms with comprehensive evaluation and visualization tools.
+A university project implementing feature selection using Genetic Algorithms, with evaluation and visualization tools.
 
 ## Quick Start
 
@@ -54,8 +54,8 @@ print(f"Features: {results['best_chromosome'].sum()}/{X_train.shape[1]}")
 - **Modular Design**: Swappable operators, selectors, and evaluators
 - **Multiple Operators**: 5 crossover types, 5 selection strategies, 3 fitness functions
 - **Baseline Comparisons**: Built-in RFE, LASSO, Mutual Information, Chi², ANOVA
-- **Statistical Rigor**: Wilcoxon, Mann-Whitney, Cohen's d, Jaccard stability
-- **Visualization**: 9 publication-quality plot functions
+- **Statistical Testing**: Wilcoxon, Mann-Whitney, Cohen's d, Jaccard stability
+- **Visualization**: 9 plot functions for analysis and comparison
 - **Experiment Framework**: `ExperimentRunner` for reproducible experiments
 - **Configuration**: YAML-based configuration system
 
@@ -80,7 +80,7 @@ fsga/
 - **[Getting Started](docs/GETTING_STARTED.md)** - Installation and basic usage
 - **[Tutorial](docs/TUTORIAL.md)** - Step-by-step guide with examples
 - **[Architecture](docs/ARCHITECTURE.md)** - System design and extension points
-- **[Project Plan](PROJECT_PLAN.md)** - Remaining tasks and roadmap
+- **[Project Plan](docs/about/project-plan.md)** - Status and roadmap
 - **Module READMEs** - See `fsga/*/README.md` for component details
 
 ## Example Results
@@ -148,19 +148,6 @@ Load with:
 ```python
 from fsga.utils.config import Config
 config = Config.from_file('configs/default.yaml')
-```
-
-## Citation
-
-If you use this framework in research, please cite:
-
-```bibtex
-@software{fsga2025,
-  title={Feature Selection via Genetic Algorithm},
-  author={Piotr Krzysztof Lis},
-  year={2025},
-  url={https://github.com/straightchlorine/feature-selection-via-genetic-algorithm}
-}
 ```
 
 ## License

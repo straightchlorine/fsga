@@ -27,7 +27,7 @@ python run_experiment.py --no-plots
 
 - Runs GA and baseline methods (RFE, LASSO, Mutual Information)
 - Statistical comparison with Wilcoxon/Mann-Whitney tests
-- Generates comprehensive visualization suite:
+- Generates visualizations:
   - Method comparison (accuracy)
   - Feature count comparison
   - Multi-metric dashboard

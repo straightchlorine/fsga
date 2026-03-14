@@ -222,7 +222,7 @@ genetic_algorithm:
   population_size: 10
   num_generations: 20
 
-# configs/production.yaml (large, thorough)
+# configs/thorough.yaml (large, thorough)
 genetic_algorithm:
   population_size: 100
   num_generations: 500

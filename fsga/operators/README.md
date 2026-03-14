@@ -45,10 +45,10 @@ Child 2:  [0, 1, 0, 1, 0]
 #### `two_point_crossover.py`
 Two split points, swap middle segment.
 
-#### `adaptive_crossover.py` ✨ NEW
+#### `adaptive_crossover.py`
 Adjusts crossover behavior based on population diversity.
 
-**Innovation**: Low diversity → more disruptive crossover (exploration)
+Low diversity → more disruptive crossover (exploration).
 
 ```python
 crossover = AdaptiveCrossover()

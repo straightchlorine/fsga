@@ -56,7 +56,7 @@ F1-score (harmonic mean of precision and recall).
 
 **Use case**: Imbalanced datasets, when false positives and false negatives have different costs
 
-#### `multi_objective_evaluator.py` ✨
+#### `multi_objective_evaluator.py`
 Returns tuple: (accuracy, feature_sparsity)
 
 **For use with NSGA-II selector**

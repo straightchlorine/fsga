@@ -32,7 +32,7 @@ accuracy = model.score(X_test, y_test)
 - `mlp`: MLPClassifier (neural network)
 
 ### `cv_strategy.py`
-Cross-validation strategies for robust fitness evaluation.
+Cross-validation strategies for fitness evaluation.
 
 ```python
 from fsga.ml.cv_strategy import KFoldCV, StratifiedKFoldCV
@@ -150,7 +150,7 @@ ga = GeneticAlgorithm(evaluator=evaluator, ...)
 |----------|------------|-------|----------|
 | Single validation set | Low | Fast | Quick prototyping |
 | 3-fold CV | Medium | Medium | Balanced |
-| 5-fold CV | High | Slow | Production quality |
+| 5-fold CV | High | Slow | Default choice |
 | 10-fold CV | Highest | Slowest | Small datasets |
 
 ## Extending

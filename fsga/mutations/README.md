@@ -49,10 +49,10 @@ mutation = DynamicMutation(initial_prob=0.1, final_prob=0.001, max_generations=1
 # Generation 100: prob = 0.001
 ```
 
-#### `feature_aware_mutation.py` ✨ NEW
+#### `feature_aware_mutation.py`
 Higher mutation rate for correlated features.
 
-**Innovation**: If features are correlated, swapping one for another is "safe"
+If features are correlated, swapping one for another is relatively safe.
 
 ```python
 mutation = FeatureAwareMutation(

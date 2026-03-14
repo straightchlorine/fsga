@@ -55,7 +55,7 @@ Uniformly random selection.
 
 **Use case**: Baseline comparison, high exploration
 
-#### `nsga2_selector.py` ✨ NEW
+#### `nsga2_selector.py`
 Non-dominated sorting for multi-objective optimization.
 
 **Objectives**: Maximize accuracy AND minimize features

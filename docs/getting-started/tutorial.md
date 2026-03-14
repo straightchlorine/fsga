@@ -171,7 +171,7 @@ Comparison:
   Feature Reduction: 50%
 ```
 
-**Key Insight**: GA achieved BETTER accuracy with FEWER features!
+GA achieved better accuracy with fewer features.
 
 ---
 
@@ -502,26 +502,24 @@ def evaluate(self, chromosome):
 ## Summary
 
 **What You Learned**:
-- ✅ How to run a basic GA for feature selection
-- ✅ How to visualize results
-- ✅ How to assess stability across runs
-- ✅ How to compare against baselines
-- ✅ How to create custom fitness functions
+- How to run a basic GA for feature selection
+- How to visualize results
+- How to assess stability across runs
+- How to compare against baselines
+- How to create custom fitness functions
 
 **Key Takeaways**:
-- GA can find better feature subsets than manual selection
-- Always run multiple times for stability assessment
-- Visualizations reveal insights not visible in raw numbers
-- Custom evaluators enable domain-specific optimization
+- GA can find good feature subsets automatically
+- Running multiple times helps assess stability
+- Visualizations help with analysis
+- Custom evaluators allow different objectives
 
-**For Academic Use**:
+**For the report**:
 - Use ExperimentRunner for reproducible experiments
-- Generate all plots with `run_comprehensive_analysis.py`
+- Generate plots with `run_comprehensive_analysis.py`
 - Include statistical tests (Wilcoxon, Cohen's d)
 - Report feature stability (Jaccard index)
 
 ---
-
-**Tutorial Complete!** 🎉
 
 For more: See `COMPREHENSIVE_ANALYSIS.md` and `ENHANCEMENT_SUMMARY.md`
