@@ -1,5 +1,9 @@
 # Feature Selection via Genetic Algorithm (FSGA)
 
+[![PyPI version](https://badge.fury.io/py/fsga.svg)](https://pypi.org/project/fsga/)
+[![Total Downloads](https://static.pepy.tech/badge/fsga)](https://pepy.tech/project/fsga)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/fsga)](https://pypi.org/project/fsga/)
+
 A university project implementing feature selection using Genetic Algorithms, with evaluation and visualization tools.
 
 ## Quick Start

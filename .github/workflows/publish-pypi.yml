@@ -81,7 +81,9 @@ jobs:
         uses: sigstore/gh-action-sigstore-python@v3.1.0
         with:
           inputs: >-
-            ./dist/*.tar.gz ./dist/*.whl #magic___^_^___line
+            ./dist/*.tar.gz
+            ./dist/*.whl
+
       - name: Upload artifact signatures to GitHub Release
         env:
           GITHUB_TOKEN: ${{ github.token }}

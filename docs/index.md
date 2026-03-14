@@ -3,7 +3,9 @@
 A university project implementing feature selection using Genetic Algorithms, with evaluation and visualization tools.
 
 [![Tests](https://github.com/straightchlorine/feature-selection-via-genetic-algorithm/workflows/Tests/badge.svg)](https://github.com/straightchlorine/feature-selection-via-genetic-algorithm/actions)
-[![PyPI version](https://badge.fury.io/py/fsga.svg)](https://badge.fury.io/py/fsga)
+[![PyPI version](https://badge.fury.io/py/fsga.svg)](https://pypi.org/project/fsga/)
+[![Total Downloads](https://static.pepy.tech/badge/fsga)](https://pepy.tech/project/fsga)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/fsga)](https://pypi.org/project/fsga/)
 [![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
