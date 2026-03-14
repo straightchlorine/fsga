@@ -1,6 +1,6 @@
 [project]
 name = "fsga"
-version = "1.1.7"
+version = "1.1.8"
 description = "Feature selection using a genetic algorithm"
 readme = "README.md"
 
