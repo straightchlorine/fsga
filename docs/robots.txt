@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://straightchlorine.github.io/feature-selection-via-genetic-algorithm/sitemap.xml

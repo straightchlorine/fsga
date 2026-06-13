@@ -37,6 +37,7 @@ venv.bak/
 .pytest_cache/
 .coverage
 .coverage.*
+coverage.xml
 htmlcov/
 .tox/
 .nox/
@@ -90,7 +91,11 @@ experiments/outputs/
 docs/_build/
 docs/_static/
 docs/_templates/
-site/  # MkDocs build output
+# MkDocs build output
+site/
+
+# LaTeX report (not committed)
+report/
 
 # OS-specific
 .DS_Store
