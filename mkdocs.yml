@@ -1,7 +1,7 @@
 site_name: FSGA - Feature Selection via Genetic Algorithm
 site_description: Feature selection using genetic algorithms
 site_author: Piotr Krzysztof Lis
-site_url: https://straightchlorine.github.io/feature-selection-via-genetic-algorithm/
+site_url: https://docs.fsga.piotrkrzysztof.dev/
 
 repo_name: straightchlorine/feature-selection-via-genetic-algorithm
 repo_url: https://github.com/straightchlorine/feature-selection-via-genetic-algorithm
