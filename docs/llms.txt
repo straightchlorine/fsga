@@ -1,0 +1,26 @@
+# FSGA
+
+> Python library for feature selection with genetic algorithms, with swappable operators, baselines, statistical tests and plots.
+
+FSGA was written as a university project. It evolves feature subsets with a genetic algorithm and compares them against baselines such as RFE and LASSO. These docs cover installation, a tutorial, the architecture and the project plan.
+
+## Docs
+
+- [Feature Selection via Genetic Algorithm in Python](https://docs.fsga.piotrkrzysztof.dev/): FSGA is a Python library for feature selection with genetic algorithms, with swappable operators, baselines, statistical tests, plots and an experiment runner.
+- [Quick Start: Install and Run Feature Selection](https://docs.fsga.piotrkrzysztof.dev/getting-started/quickstart/): Install FSGA and run genetic algorithm feature selection on Iris. Shows how to load a config file, run the experiment script and call three plot functions.
+- [Tutorial: Genetic Algorithm Feature Selection on Iris](https://docs.fsga.piotrkrzysztof.dev/getting-started/tutorial/): A step-by-step FSGA tutorial: run a GA on Iris, plot the results, check stability over repeated runs, compare with RFE and LASSO, and write a custom evaluator.
+- [Architecture: Package Layout and Extension Points](https://docs.fsga.piotrkrzysztof.dev/user-guide/architecture/): How FSGA is put together: package layout, the strategy pattern and dependency injection, data flow, key classes, extension points and the YAML config.
+- [Project Plan: Finished Work and Planned Features](https://docs.fsga.piotrkrzysztof.dev/about/project-plan/): What is finished in FSGA and what is not: engine, operators, baselines, plots and tests are done, while NSGA-II and other multi-objective work are only planned.
+
+## Optional
+
+- [Source repository](https://github.com/straightchlorine/fsga): code, issues and releases
+- [Author](https://piotrkrzysztof.dev/): Piotr Krzysztof Lis
+
+---
+
+<div align="center">
+
+To the only God, be honour and glory for ever and ever.
+
+</div>

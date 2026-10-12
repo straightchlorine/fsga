@@ -1,19 +1,22 @@
 [project]
 name = "fsga"
-version = "1.1.8"
+version = "1.1.9"
 description = "Feature selection using a genetic algorithm"
 readme = "README.md"
 
 authors = [{name = "Piotr Krzysztof", email = "piotr@codextechnologies.org"}]
-license = {text = "MIT"}
-requires-python = ">=3.13"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.11"
 keywords = ["genetic-algorithm", "feature-selection", "machine-learning", "optimization", "evolutionary-computation"]
 
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Science/Research",
-    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 
@@ -51,10 +54,11 @@ all = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/zweiss/feature-selection-via-genetic-algorithm"
-Documentation = "https://github.com/zweiss/feature-selection-via-genetic-algorithm/blob/main/README.md"
-Repository = "https://github.com/zweiss/feature-selection-via-genetic-algorithm"
-Issues = "https://github.com/zweiss/feature-selection-via-genetic-algorithm/issues"
+Homepage = "https://github.com/straightchlorine/fsga"
+Documentation = "https://docs.fsga.piotrkrzysztof.dev/"
+Repository = "https://github.com/straightchlorine/fsga"
+Issues = "https://github.com/straightchlorine/fsga/issues"
+Author = "https://piotrkrzysztof.dev"
 
 [build-system]
 requires = ["setuptools>=80.9.0", "wheel"]
@@ -67,6 +71,8 @@ exclude = ["tests*", "docs*", "notebooks*", "experiments*"]
 
 [tool.ruff]
 # Exclude commonly ignored directories (from knapsack project)
+# ruff >= 0.17 also formats Markdown; the README*.md files under fsga/ are not checked.
+extend-exclude = ["*.md"]
 exclude = [
     ".bzr",
     ".direnv",
@@ -100,7 +106,7 @@ exclude = [
 line-length = 89
 indent-width = 4
 
-target-version = "py313"
+target-version = "py311"
 
 [tool.ruff.lint]
 select = [
@@ -157,7 +163,7 @@ exclude_lines = [
 ]
 
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.11"
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = false

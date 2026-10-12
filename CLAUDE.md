@@ -9,9 +9,9 @@ University ML project: feature selection using a genetic algorithm. Adapted from
 reusing ~80% of the GA components (binary chromosomes, operators, selectors) and adding
 ML fitness evaluation on top.
 
-**Python**: >=3.13
+**Python**: >=3.11
 **Dependencies**: numpy, pandas, scikit-learn, matplotlib, seaborn, pyyaml, scipy
-**Tests**: pytest, 280+ tests, 82% coverage
+**Tests**: pytest, 290 tests, 67% coverage
 **Linting**: ruff
 
 ---
@@ -129,9 +129,9 @@ uv run pytest tests/ --cov=fsga --cov-report=html
 
 | Dataset | GA Accuracy | Features Used | vs All Features |
 |---------|-------------|---------------|-----------------|
-| Breast Cancer | 98.3% | 12/30 (40%) | +2.6% |
-| Iris | 98.3% | 2/4 (50%) | +6.2% |
-| Wine | 100% | 6.5/13 (50%) | +1.4% |
+| Breast Cancer | 98.3% | 14.3/30 (48%) | +2.6% |
+| Iris | 97.7% | 2.6/4 (65%) | +2.7% |
+| Wine | 100% | 7.2/13 (55%) | +1.7% |
 
 ---
 

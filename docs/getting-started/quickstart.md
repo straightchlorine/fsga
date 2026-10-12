@@ -1,10 +1,15 @@
+---
+title: "Quick Start: Install and Run Feature Selection"
+description: "Install FSGA and run genetic algorithm feature selection on Iris. Shows how to load a config file, run the experiment script and call three plot functions."
+---
+
 # Getting Started
 
 ## Installation
 
 ```bash
-git clone https://github.com/straightchlorine/feature-selection-via-genetic-algorithm.git
-cd feature-selection-via-genetic-algorithm
+git clone https://github.com/straightchlorine/fsga.git
+cd fsga
 uv venv && source .venv/bin/activate
 uv pip install -e .
 ```
@@ -99,10 +104,10 @@ from fsga.visualization import (
 )
 
 # Fitness over generations
-plot_fitness_evolution(results['fitness_history'], save_path='fitness.png')
+plot_fitness_evolution(results['best_fitness_history'], save_path='fitness.png')
 
 # Compare methods
-plot_method_comparison(runner.results, save_path='comparison.png')
+plot_method_comparison({m: r['accuracies'] for m, r in runner.results.items()}, save_path='comparison.png')
 
 # Multi-metric dashboard
 plot_multi_metric_comparison(runner.results, save_path='multi_metric.png')

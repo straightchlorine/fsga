@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block site_meta %}
+  {% if not page or page.url == "404.html" %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="Page not found. Go back to the FSGA documentation home page to browse the quick start, tutorial, architecture overview and project plan.">
+    <link rel="icon" href="{{ config.theme.favicon | url }}">
+  {% else %}
+    {{ super() }}
+  {% endif %}
+{% endblock %}
+
+{% block htmltitle %}
+  {% if not page or page.url == "404.html" %}
+    <title>Page not found - FSGA</title>
+  {% else %}
+    {{ super() }}
+  {% endif %}
+{% endblock %}
+
+{% block extrahead %}
+  {{ super() }}
+  {#- the 404 page has a page object without a source file -#}
+  {% set real_page = page and page.file and page.url != "404.html" %}
+  {% if real_page %}
+    {% set site = config.site_url | trim("/") ~ "/" %}
+    {% set person = "https://piotrkrzysztof.dev/#piotr" %}
+    <meta property="og:locale" content="en_US">
+    {% set og_title = (page.meta.title or page.title) ~ " - " ~ config.site_name %}
+    {% set og_desc = page.meta.description or config.site_description %}
+    <meta property="og:type" content="{{ 'website' if page.is_homepage else 'article' }}">
+    <meta property="og:site_name" content="{{ config.site_name }}">
+    <meta property="og:title" content="{{ og_title }}">
+    <meta property="og:description" content="{{ og_desc }}">
+    <meta property="og:url" content="{{ page.canonical_url }}">
+    <meta name="twitter:card" content="summary">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": {{ (site ~ "#website") | tojson }},
+          "name": {{ config.site_name | tojson }},
+          "url": {{ site | tojson }},
+          "description": {{ config.site_description | tojson }},
+          "inLanguage": "en",
+          "author": { "@id": {{ person | tojson }} }
+        },
+        {
+          "@type": "Person",
+          "@id": {{ person | tojson }},
+          "name": "Piotr Krzysztof Lis",
+          "alternateName": "Piotr Krzysztof",
+          "url": "https://piotrkrzysztof.dev",
+          "sameAs": ["https://github.com/straightchlorine", "https://codeberg.org/piotrkrzysztof", "https://pypi.org/user/straightchlorine", "https://hub.docker.com/u/straightchlorine", "https://www.linkedin.com/in/straightchlorine"]
+        }
+      ]
+    }
+    </script>
+  {% endif %}
+{% endblock %}

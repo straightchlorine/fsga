@@ -1,3 +1,8 @@
+---
+title: "Architecture: Package Layout and Extension Points"
+description: "How FSGA is put together: package layout, the strategy pattern and dependency injection, data flow, key classes, extension points and the YAML config."
+---
+
 # FSGA Architecture
 
 System design and implementation overview.
@@ -10,7 +15,7 @@ fsga/
 │   ├── genetic_algorithm.py  # Main GA loop
 │   └── population.py          # Population management
 │
-├── operators/     # Crossover Operators (5 types)
+├── operators/     # Crossover Operators (4 types)
 │   ├── uniform_crossover.py
 │   ├── single_point_crossover.py
 │   ├── two_point_crossover.py
@@ -19,7 +24,7 @@ fsga/
 ├── mutations/     # Mutation Operators
 │   └── bitflip_mutation.py
 │
-├── selectors/     # Selection Strategies (5 types)
+├── selectors/     # Selection Strategies (4 types)
 │   ├── tournament_selector.py
 │   ├── roulette_selector.py
 │   ├── ranking_selector.py
@@ -37,7 +42,7 @@ fsga/
 │   └── loader.py              # load_dataset()
 │
 ├── analysis/      # Experiment Framework
-│   ├── baselines.py           # 6 baseline methods
+│   ├── baselines.py           # 5 baseline methods
 │   └── experiment_runner.py   # ExperimentRunner class
 │
 ├── visualization/ # Plotting (9 functions)
@@ -46,6 +51,7 @@ fsga/
 └── utils/         # Utilities
     ├── config.py              # Configuration management
     ├── metrics.py             # Statistical tests
+    ├── logging.py             # Logging helpers
     └── serialization.py       # Results I/O
 ```
 
@@ -66,6 +72,7 @@ class Crossover(ABC):
 class UniformCrossover(Crossover):
     def crossover(self, parent1, parent2):
         # Implementation...
+        pass
 ```
 
 This allows easy switching:
@@ -83,6 +90,7 @@ Components are injected, not hardcoded:
 
 ```python
 ga = GeneticAlgorithm(
+    num_features=num_features,
     evaluator=evaluator,           # Inject fitness function
     selector=selector,             # Inject selection strategy
     crossover_operator=crossover,  # Inject crossover
@@ -96,7 +104,7 @@ ga = GeneticAlgorithm(
 1. Initialization
    Dataset → load_dataset() → X_train, y_train
    Model → ModelWrapper → sklearn classifier
-   Evaluator → AccuracyEvaluator(X, y, model)
+   Evaluator → AccuracyEvaluator(X_train, y_train, X_val, y_val, model)
 
 2. GA Loop (per generation)
    Population → Selector.select() → Parents
@@ -105,7 +113,7 @@ ga = GeneticAlgorithm(
    Mutated → Evaluator.evaluate() → Fitness Scores
 
 3. Selection Pressure
-   Fitness Scores → Elitism/Tournament → Next Generation
+   Fitness Scores → Elitism/Tournament → Parents of Next Generation
 
 4. Convergence Check
    if no improvement for N generations:
@@ -122,24 +130,22 @@ ga = GeneticAlgorithm(
 Main orchestrator with early stopping and metrics tracking.
 
 **Properties:**
-- `population_size`, `num_generations`
-- `mutation_rate`, `crossover_rate`
-- `early_stopping_patience`
+- `population_size`, `generations`, `mutation_rate`
+- `early_stopping_patience` and `num_features` are constructor arguments
 
 **Methods:**
 - `evolve()` - Main GA loop
-- `_initialize_population()` - Create initial population
-- `_selection()` - Select parents
-- `_crossover()` - Apply crossover
-- `_mutation()` - Apply mutation
-- `_evaluate_population()` - Calculate fitness
+- `new_generation(current_generation)` - Build the next population
+- `reinitialize_population()` - Start again from a new random population
+- `get_best_solution(n=1)` - Best chromosome(s) in the current population
+- `clear_metrics()` - Reset the tracked metrics
 
 ### ExperimentRunner
 
 Framework for reproducible experiments.
 
 **Methods:**
-- `run_ga_experiment(n_runs=10)` - Multiple GA runs
+- `run_ga_experiment(population_size, num_generations, ...)` - Multiple GA runs (`n_runs` is set in the constructor)
 - `run_baseline_experiment(method)` - Run baseline method
 - `compare_methods()` - Statistical comparison
 - `generate_summary_report()` - Text report
@@ -157,23 +163,30 @@ class MyCustomCrossover(Crossover):
         # Your crossover logic
         child1 = ...
         child2 = ...
-        return child1, child2
+        return np.array([child1, child2])  # shape (2, num_features)
 ```
 
 ### Adding a New Evaluator
 
 ```python
 from fsga.evaluators.evaluator import Evaluator
+import numpy as np
 
 class MyCustomEvaluator(Evaluator):
+    def __init__(self, X_train, y_train, X_val, y_val, model):
+        self.X_train, self.y_train = X_train, y_train
+        self.X_val, self.y_val = X_val, y_val
+        self.model = model
+
     def evaluate(self, chromosome):
         # Select features
         selected_features = np.where(chromosome == 1)[0]
-        X_selected = self.X_train[:, selected_features]
+        X_train_sel = self.X_train[:, selected_features]
+        X_val_sel = self.X_val[:, selected_features]
 
-        # Train and evaluate
-        self.model.fit(X_selected, self.y_train)
-        score = self.model.score(X_selected, self.y_train)
+        # Train on the training set, score on the validation set
+        self.model.fit(X_train_sel, self.y_train)
+        score = self.model.score(X_val_sel, self.y_val)
 
         return score
 ```
@@ -184,16 +197,16 @@ class MyCustomEvaluator(Evaluator):
 
 Training ML models is expensive. Strategies:
 - Use validation set (not full training set)
-- Fast models (RandomForest > SVM)
+- Fast models (SVM > RandomForest)
 - Smaller population (50 vs 100)
 
 ### Memory Usage
 
-Each chromosome: `num_features` bytes
-Population: `population_size × num_features × generations` bytes
+Each chromosome: `num_features` integers (8 bytes each with the default int64)
+Population: `population_size × num_features` genes (only the current population is kept)
 
-For 30 features, 50 population, 100 generations:
-= 50 × 30 × 100 = 150KB (negligible)
+For 30 features, 50 population:
+= 50 × 30 × 8 = 12KB (negligible)
 
 ## Configuration
 
@@ -209,11 +222,12 @@ early_stopping_patience: 10
 
 dataset:
   name: iris
-  split_ratio: 0.7
+  test_size: 0.2
+  val_size: 0.1
 
 model:
   type: rf
-  n_estimators: 50
+  n_estimators: 100
   random_state: 42
 ```
 
@@ -231,7 +245,7 @@ population_size = config.population_size
 - **Unit tests**: Each operator in isolation
 - **Integration tests**: Full GA workflow
 - **Edge case tests**: Empty features, single sample
-- **Coverage**: 82% code coverage
+- **Coverage**: about 67% line coverage
 
 See module READMEs for detailed developer guides:
 - `fsga/core/README_DEV.md` - Core GA internals

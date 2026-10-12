@@ -7,7 +7,7 @@ for genetic algorithm experiments.
 from pathlib import Path
 from typing import Any
 
-import yaml
+import yaml  # type: ignore[import-untyped]  # PyYAML ships no inline types
 
 
 class ConfigError(Exception):
@@ -315,4 +315,4 @@ class Config:
 
     def __str__(self) -> str:
         """Human-readable string representation."""
-        return yaml.dump(self._config, default_flow_style=False, sort_keys=False)
+        return str(yaml.dump(self._config, default_flow_style=False, sort_keys=False))

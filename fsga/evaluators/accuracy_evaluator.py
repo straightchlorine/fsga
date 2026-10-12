@@ -78,7 +78,7 @@ class AccuracyEvaluator(Evaluator):
         # Train model on selected features
         try:
             self.model.fit(X_train_subset, self.y_train)
-            accuracy = self.model.score(X_val_subset, self.y_val)
+            accuracy: float = self.model.score(X_val_subset, self.y_val)
             return accuracy
         except Exception as e:
             # If training fails (e.g., too few samples), return 0

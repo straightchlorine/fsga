@@ -7,6 +7,7 @@ and generating results with statistical analysis.
 import logging
 import time
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 from sklearn.metrics import accuracy_score, f1_score
@@ -60,7 +61,7 @@ class ExperimentRunner:
         self.random_state = random_state
         self.results_dir = Path(results_dir) if results_dir else None
 
-        self.results = {}
+        self.results: dict[str, dict[str, Any]] = {}
         self.serializer = ResultsSerializer()
 
     def run_ga_experiment(

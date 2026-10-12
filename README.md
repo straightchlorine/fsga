@@ -10,13 +10,13 @@ A university project implementing feature selection using Genetic Algorithms, wi
 
 ```bash
 # Installation
-git clone <repository-url>
-cd feature-selection-via-genetic-algorithm
+git clone https://github.com/straightchlorine/fsga.git
+cd fsga
 uv venv && source .venv/bin/activate
 uv pip install -e .
 
 # Run example
-python experiments/run_comparison.py
+python experiments/run_experiment.py
 ```
 
 ## Basic Usage
@@ -56,7 +56,7 @@ print(f"Features: {results['best_chromosome'].sum()}/{X_train.shape[1]}")
 ## Key Features
 
 - **Modular Design**: Swappable operators, selectors, and evaluators
-- **Multiple Operators**: 5 crossover types, 5 selection strategies, 3 fitness functions
+- **Multiple Operators**: 4 crossover operators, 4 selection strategies, 3 fitness functions
 - **Baseline Comparisons**: Built-in RFE, LASSO, Mutual Information, Chi², ANOVA
 - **Statistical Testing**: Wilcoxon, Mann-Whitney, Cohen's d, Jaccard stability
 - **Visualization**: 9 plot functions for analysis and comparison
@@ -81,30 +81,30 @@ fsga/
 
 ## Documentation
 
-- **[Getting Started](docs/GETTING_STARTED.md)** - Installation and basic usage
-- **[Tutorial](docs/TUTORIAL.md)** - Step-by-step guide with examples
-- **[Architecture](docs/ARCHITECTURE.md)** - System design and extension points
+- **[Getting Started](docs/getting-started/quickstart.md)** - Installation and basic usage
+- **[Tutorial](docs/getting-started/tutorial.md)** - Step-by-step guide with examples
+- **[Architecture](docs/user-guide/architecture.md)** - System design and extension points
 - **[Project Plan](docs/about/project-plan.md)** - Status and roadmap
 - **Module READMEs** - See `fsga/*/README.md` for component details
 
 ## Example Results
 
-**Breast Cancer Dataset** (30 features → 12 features):
-- GA Accuracy: **98.3%** with **40% of features**
+**Breast Cancer Dataset** (30 features → 14 features):
+- GA Accuracy: **98.3%** with **48% of features**
 - All Features: 95.7% with 100% of features
-- **+2.6% accuracy, 60% dimensionality reduction**
+- **+2.6% accuracy, 52% dimensionality reduction**
 
-**Iris Dataset** (4 features → 2 features):
-- GA Accuracy: **98.3%** with **50% of features**
+**Iris Dataset** (4 features → 2.6 features):
+- GA Accuracy: **97.7%** with **65% of features**
 - Selected: petal length, petal width
 
-**Wine Dataset** (13 features → 6.5 features):
-- GA Accuracy: **100%** with **50% of features**
+**Wine Dataset** (13 features → 7.2 features):
+- GA Accuracy: **100%** with **55% of features**
 
 ## Running Experiments
 
 ```bash
-# Full analysis (all datasets, all visualizations)
+# Full analysis (iris, wine, breast_cancer; 6 plots per dataset)
 python experiments/run_experiment.py
 
 # Quick test (single dataset, fewer runs)
@@ -128,7 +128,7 @@ uv run pytest tests/ -v
 # With coverage
 uv run pytest tests/ --cov=fsga --cov-report=html
 
-# Current: 280+ tests, 82% coverage
+# Current: 290 tests (about 67% line coverage)
 ```
 
 ## Configuration
@@ -144,7 +144,7 @@ early_stopping_patience: 10
 
 dataset:
   name: iris
-  split_ratio: 0.7
+  test_size: 0.2
 ```
 
 Load with:
@@ -158,9 +158,10 @@ config = Config.from_file('configs/default.yaml')
 
 MIT License - see LICENSE file for details.
 
-## Contributing
+---
 
-Contributions welcome! See module READMEs for extension points:
-- New operators: `fsga/operators/README.md`
-- New selectors: `fsga/selectors/README.md`
-- New evaluators: `fsga/evaluators/README.md`
+<div align="center">
+
+To the only God, be honour and glory for ever and ever.
+
+</div>

@@ -1,3 +1,8 @@
+---
+title: "Tutorial: Genetic Algorithm Feature Selection on Iris"
+description: "A step-by-step FSGA tutorial: run a GA on Iris, plot the results, check stability over repeated runs, compare with RFE and LASSO, and write a custom evaluator."
+---
+
 # Getting Started with FSGA (Feature Selection via Genetic Algorithm)
 
 **Tutorial**: Complete beginner's guide to using the FSGA library
@@ -6,7 +11,7 @@
 
 ```bash
 # Install dependencies
-cd ~/code/feature-selection-via-genetic-algorithm
+cd ~/code/fsga
 uv pip install numpy scikit-learn matplotlib scipy
 
 # Verify installation
@@ -40,8 +45,8 @@ print(f"Features: {feature_names}")
 
 **Output**:
 ```
-Training set: (112, 4)
-Test set: (38, 4)
+Training set: (120, 4)
+Test set: (30, 4)
 Features: ['sepal length (cm)', 'sepal width (cm)', 'petal length (cm)', 'petal width (cm)']
 ```
 
@@ -86,11 +91,10 @@ results = ga.evolve()
 
 **Output** (abbreviated):
 ```
-Generation 1/50: Best=0.8947, Avg=0.7526, Worst=0.6316
-Generation 2/50: Best=0.9211, Avg=0.8342, Worst=0.7105
+Generation 1/50: Best=0.9333, Avg=0.7856, Diversity=46.67%
+Generation 2/50: Best=0.9333, Avg=0.8556, Diversity=40.00%
 ...
-Generation 23/50: Best=0.9737, Avg=0.9421, Worst=0.8947
-Early stopping triggered at generation 23
+Early stopping at generation 11 (no improvement for 10 generations)
 ```
 
 ### Step 5: Analyze Results
@@ -115,15 +119,15 @@ print(f"Generations Run: {len(results['best_fitness_history'])}")
 ============================================================
 RESULTS
 ============================================================
-Best Accuracy: 0.9737
+Best Accuracy: 0.9333
 Features Selected: 2/4
 Selected Features: ['petal length (cm)', 'petal width (cm)']
-Generations Run: 23
+Generations Run: 11
 ```
 
 **Interpretation**:
 - GA found that only 2 features are needed!
-- Achieved 97.37% accuracy with just petal measurements
+- Achieved 93.33% accuracy with just petal measurements
 - Reduced dimensionality by 50%
 
 ---
@@ -143,9 +147,9 @@ plot_fitness_evolution(
 ```
 
 **What You'll See**:
-- Green line climbing from ~0.70 to ~0.97
-- Plateau around generation 13 (convergence)
-- Early stopping at generation 23
+- Green line climbing from ~0.90 to ~0.93
+- Plateau around generation 1 (convergence)
+- Early stopping at generation 11
 
 ### Compare with Baseline
 
@@ -165,9 +169,9 @@ print(f"  Feature Reduction: 50%")
 **Output**:
 ```
 Comparison:
-  GA (2 features): 0.9737
-  All Features (4): 0.9211
-  Improvement: 5.26%
+  GA (2 features): 0.9333
+  All Features (4): 0.9000
+  Improvement: 3.33%
   Feature Reduction: 50%
 ```
 
@@ -193,7 +197,7 @@ all_chromosomes = []
 all_accuracies = []
 
 for run in range(10):
-    # Re-initialize GA with different random seed
+    # Each run starts from a new random population
     ga = GeneticAlgorithm(
         num_features=X_train.shape[1],
         evaluator=evaluator,
@@ -228,28 +232,28 @@ for i, (name, freq) in enumerate(zip(feature_names, frequencies)):
 **Output**:
 ```
 Running GA 10 times for stability analysis...
-  Run 1: Accuracy=0.9737, Features=2
-  Run 2: Accuracy=0.9474, Features=2
-  Run 3: Accuracy=0.9737, Features=2
+  Run 1: Accuracy=0.9333, Features=1
+  Run 2: Accuracy=0.9333, Features=3
+  Run 3: Accuracy=0.9333, Features=1
   ...
-  Run 10: Accuracy=0.9737, Features=2
+  Run 10: Accuracy=0.9333, Features=2
 
 ============================================================
 STABILITY ANALYSIS
 ============================================================
-Mean Accuracy: 0.9632 ± 0.0121
+Mean Accuracy: 0.9333 ± 0.0000
 
 Feature Selection Frequency:
   sepal length (cm): 0% (0/10 runs)
-  sepal width (cm): 10% (1/10 runs)
-  petal length (cm): 100% (10/10 runs)  ← CORE FEATURE
-  petal width (cm): 100% (10/10 runs)   ← CORE FEATURE
+  sepal width (cm): 30% (3/10 runs)
+  petal length (cm): 70% (7/10 runs)
+  petal width (cm): 70% (7/10 runs)
 ```
 
 **Interpretation**:
-- Petal measurements selected in 100% of runs → **core features**
-- Sepal measurements almost never selected → redundant
-- Very stable selection (low variance)
+- Petal measurements selected in 70% of runs
+- Sepal measurements less often selected → redundant
+- Accuracy is stable (no variance), though the selected subset varies
 
 ### Visualize Feature Stability
 
@@ -274,6 +278,9 @@ plot_feature_frequency(
 ```python
 from fsga.analysis.experiment_runner import ExperimentRunner
 from fsga.visualization import plot_method_comparison
+
+import logging
+logging.basicConfig(level=logging.INFO)
 
 # Create experiment runner
 runner = ExperimentRunner(
@@ -326,34 +333,34 @@ plot_method_comparison(
 **Output**:
 ```
 GA vs RFE:
-  GA Mean: 0.9632
-  RFE Mean: 0.9474
-  Improvement: 0.0158 (1.58%)
-  p-value: 0.0234
-  Significant: Yes
-  Effect Size (Cohen's d): 0.892 (large)
+  GA Mean: 0.9767
+  RFE Mean: 0.9667
+  Improvement: 0.0100 (1.00%)
+  p-value: 0.1250
+  Significant: No
+  Effect Size (Cohen's d): 0.299
 
 GA vs LASSO:
-  GA Mean: 0.9632
-  LASSO Mean: 0.9263
-  Improvement: 0.0369 (3.69%)
-  p-value: 0.0012
+  GA Mean: 0.9767
+  LASSO Mean: 0.9500
+  Improvement: 0.0267 (2.67%)
+  p-value: 0.0156
   Significant: Yes
-  Effect Size (Cohen's d): 1.423 (large)
+  Effect Size (Cohen's d): 0.833
 
 GA vs All Features:
-  GA Mean: 0.9632
-  All Features Mean: 0.9211
-  Improvement: 0.0421 (4.21%)
-  p-value: 0.0005
+  GA Mean: 0.9767
+  All Features Mean: 0.9500
+  Improvement: 0.0267 (2.67%)
+  p-value: 0.0156
   Significant: Yes
-  Effect Size (Cohen's d): 1.651 (large)
+  Effect Size (Cohen's d): 0.833
 ```
 
 **Interpretation**:
-- GA significantly outperforms all baselines (p < 0.05)
-- Large effect sizes (Cohen's d > 0.8)
-- 4.21% improvement over using all features
+- GA significantly outperforms LASSO and all features (p < 0.05), but not RFE
+- Large effect sizes against LASSO and all features (Cohen's d > 0.8)
+- 2.67% improvement over using all features
 
 ---
 
@@ -371,7 +378,8 @@ class SparseAccuracyEvaluator(Evaluator):
     """Multi-objective: maximize accuracy, minimize features."""
 
     def __init__(self, X_train, y_train, X_val, y_val, model, sparsity_weight=0.1):
-        super().__init__(X_train, y_train, X_val, y_val)
+        self.X_train, self.y_train = X_train, y_train
+        self.X_val, self.y_val = X_val, y_val
         self.model = model
         self.sparsity_weight = sparsity_weight  # How much to penalize features
 
@@ -444,11 +452,10 @@ print(f"  Fitness (with sparsity): {results_sparse['best_fitness']:.4f}")
 
 **Fix**:
 ```python
-# Increase mutation rate
-mutation = BitFlipMutation(probability=0.05)  # Was 0.01
-
+# Increase mutation rate (set it on the GA; it overrides the operator's probability)
 # Increase population diversity
 ga = GeneticAlgorithm(
+    mutation_rate=0.05,  # Was 0.01
     population_size=50,  # Was 30
     ...
 )
@@ -469,7 +476,7 @@ ga = GeneticAlgorithm(
 )
 
 # Run multiple times and take best
-best_overall = max([ga.evolve() for _ in range(5)], key=lambda r: r['best_fitness'])
+best_overall = max([(ga.reinitialize_population(), ga.evolve())[1] for _ in range(5)], key=lambda r: r['best_fitness'])
 ```
 
 ### Issue 3: No Features Selected
@@ -494,7 +501,7 @@ def evaluate(self, chromosome):
 1. **Try other datasets**: `load_dataset('wine')`, `load_dataset('breast_cancer')`
 2. **Experiment with operators**: Try `SinglePointCrossover`, `RouletteSelector`
 3. **Read module READMEs**: `fsga/core/README_DEV.md`, `fsga/visualization/README.md`
-4. **Run comprehensive analysis**: `python experiments/run_comprehensive_analysis.py`
+4. **Run comprehensive analysis**: `python experiments/run_experiment.py`
 5. **Create custom evaluator**: Multi-objective, regression, etc.
 
 ---
@@ -516,10 +523,6 @@ def evaluate(self, chromosome):
 
 **For the report**:
 - Use ExperimentRunner for reproducible experiments
-- Generate plots with `run_comprehensive_analysis.py`
+- Generate plots with `run_experiment.py`
 - Include statistical tests (Wilcoxon, Cohen's d)
 - Report feature stability (Jaccard index)
-
----
-
-For more: See `COMPREHENSIVE_ANALYSIS.md` and `ENHANCEMENT_SUMMARY.md`

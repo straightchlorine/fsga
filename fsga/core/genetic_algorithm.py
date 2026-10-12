@@ -119,10 +119,10 @@ class GeneticAlgorithm:
         self.population.initialize_population(strategy="random")
 
         # Metrics storage
-        self.best_fitness = []
-        self.average_fitness = []
-        self.worst_fitness = []
-        self.diversity = []
+        self.best_fitness: list[float] = []
+        self.average_fitness: list[np.floating] = []
+        self.worst_fitness: list[float] = []
+        self.diversity: list[float] = []
         self.optimal_generation = 0
 
     @property

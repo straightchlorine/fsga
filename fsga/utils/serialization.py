@@ -134,7 +134,7 @@ class ResultsSerializer:
                 return self._load_pickle(filepath)
             elif format == "json":
                 return self._load_json(filepath)
-            elif format == "npz":
+            else:
                 return self._load_numpy(filepath)
         except Exception as e:
             raise SerializationError(f"Failed to load results: {e}") from e
@@ -249,7 +249,8 @@ class ResultsSerializer:
             raise FileNotFoundError(f"Checkpoint not found: {filepath}")
 
         with open(filepath, "rb") as f:
-            return pickle.load(f)
+            state: dict = pickle.load(f)
+        return state
 
     # Private methods for format-specific serialization
 
@@ -261,7 +262,8 @@ class ResultsSerializer:
     def _load_pickle(self, filepath: Path) -> dict:
         """Load from pickle."""
         with open(filepath, "rb") as f:
-            return pickle.load(f)
+            data: dict = pickle.load(f)
+        return data
 
     def _save_json(self, data: dict, filepath: Path) -> None:
         """Save as JSON (human-readable, but converts numpy arrays to lists)."""
@@ -274,7 +276,8 @@ class ResultsSerializer:
     def _load_json(self, filepath: Path) -> dict:
         """Load from JSON (arrays remain as lists, not numpy arrays)."""
         with open(filepath) as f:
-            return json.load(f)
+            data: dict = json.load(f)
+        return data
 
     def _save_numpy(self, data: dict, filepath: Path) -> None:
         """Save as compressed numpy archive (.npz).

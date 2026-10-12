@@ -1,16 +1,17 @@
-site_name: FSGA - Feature Selection via Genetic Algorithm
-site_description: Feature selection using genetic algorithms
+site_name: FSGA
+site_description: FSGA is a Python library for feature selection with genetic algorithms, with swappable operators, baselines, statistical tests, plots and an experiment runner.
 site_author: Piotr Krzysztof Lis
 site_url: https://docs.fsga.piotrkrzysztof.dev/
 
-repo_name: straightchlorine/feature-selection-via-genetic-algorithm
-repo_url: https://github.com/straightchlorine/feature-selection-via-genetic-algorithm
+repo_name: straightchlorine/fsga
+repo_url: https://github.com/straightchlorine/fsga
 edit_uri: edit/master/docs/
 
-copyright: Copyright &copy; 2025 Piotr Krzysztof Lis
+copyright: Copyright &copy; 2025 Piotr Krzysztof Lis - <a href="https://piotrkrzysztof.dev">piotrkrzysztof.dev</a>
 
 theme:
   name: material
+  custom_dir: overrides
   language: en
   palette:
     # Light mode
@@ -128,6 +129,8 @@ extra:
   social:
     - icon: fontawesome/brands/github
       link: https://github.com/straightchlorine
+    - icon: fontawesome/solid/globe
+      link: https://piotrkrzysztof.dev
     - icon: fontawesome/brands/python
       link: https://pypi.org/project/fsga/
 
@@ -140,7 +143,6 @@ extra_css:
 
 extra_javascript:
   - javascripts/mathjax.js
-  - https://polyfill.io/v3/polyfill.min.js?features=es6
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
 
 nav:

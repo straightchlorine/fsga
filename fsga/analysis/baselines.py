@@ -4,6 +4,8 @@ Implements RFE, LASSO, Mutual Information, and Chi-squared feature selection
 to compare against the GA approach.
 """
 
+from typing import cast
+
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.feature_selection import RFE as SklearnRFE
@@ -26,8 +28,8 @@ class BaselineSelector:
             random_state: Random seed for reproducibility
         """
         self.random_state = random_state
-        self.selected_features_ = None
-        self.scores_ = None
+        self.selected_features_: np.ndarray | None = None
+        self.scores_: np.ndarray | None = None
 
     def fit(self, X: np.ndarray, y: np.ndarray) -> "BaselineSelector":
         """Fit the selector on training data.
@@ -95,7 +97,7 @@ class RFESelector(BaselineSelector):
         )
         self.n_features_to_select = n_features_to_select
         self.step = step
-        self.rfe_ = None
+        self.rfe_: SklearnRFE | None = None
 
     def fit(self, X: np.ndarray, y: np.ndarray) -> "RFESelector":
         """Fit RFE on training data.
@@ -131,10 +133,10 @@ class RFESelector(BaselineSelector):
             np.ndarray: Indices of selected features
         """
         if k is None:
-            return self.selected_features_
+            return cast(np.ndarray, self.selected_features_)
         else:
             # Select top k features by ranking
-            return np.argsort(self.scores_)[:k]
+            return np.argsort(cast(np.ndarray, self.scores_))[:k]
 
     def __str__(self):
         return "RFE"
@@ -159,7 +161,7 @@ class LASSOSelector(BaselineSelector):
         super().__init__(random_state)
         self.alphas = alphas
         self.cv = cv
-        self.lasso_ = None
+        self.lasso_: LogisticRegression | None = None
 
     def fit(self, X: np.ndarray, y: np.ndarray) -> "LASSOSelector":
         """Fit LASSO on training data.
@@ -217,10 +219,10 @@ class LASSOSelector(BaselineSelector):
             np.ndarray: Indices of selected features
         """
         if k is None:
-            return self.selected_features_
+            return cast(np.ndarray, self.selected_features_)
         else:
             # Select top k features by coefficient magnitude
-            return np.argsort(-self.scores_)[:k]
+            return np.argsort(-cast(np.ndarray, self.scores_))[:k]
 
     def __str__(self):
         return "LASSO"
@@ -267,7 +269,7 @@ class MutualInfoSelector(BaselineSelector):
             np.ndarray: Indices of selected features
         """
         k = k or self.k
-        return np.argsort(-self.scores_)[:k]
+        return np.argsort(-cast(np.ndarray, self.scores_))[:k]
 
     def __str__(self):
         return "MutualInfo"
@@ -317,7 +319,7 @@ class Chi2Selector(BaselineSelector):
             np.ndarray: Indices of selected features
         """
         k = k or self.k
-        return np.argsort(-self.scores_)[:k]
+        return np.argsort(-cast(np.ndarray, self.scores_))[:k]
 
     def __str__(self):
         return "Chi2"
@@ -363,7 +365,7 @@ class ANOVASelector(BaselineSelector):
             np.ndarray: Indices of selected features
         """
         k = k or self.k
-        return np.argsort(-self.scores_)[:k]
+        return np.argsort(-cast(np.ndarray, self.scores_))[:k]
 
     def __str__(self):
         return "ANOVA"
@@ -384,7 +386,7 @@ def get_baseline_selector(method: str, **kwargs) -> BaselineSelector:
         >>> selector.fit(X_train, y_train)
         >>> selected = selector.get_selected_features()
     """
-    selectors = {
+    selectors: dict[str, type[BaselineSelector]] = {
         "rfe": RFESelector,
         "lasso": LASSOSelector,
         "mi": MutualInfoSelector,

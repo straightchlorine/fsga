@@ -1,3 +1,8 @@
+---
+title: "Project Plan: Finished Work and Planned Features"
+description: "What is finished in FSGA and what is not: engine, operators, baselines, plots and tests are done, while NSGA-II and other multi-objective work are only planned."
+---
+
 # Feature Selection via Genetic Algorithm - Project Status & Roadmap
 
 ## Implementation Status
@@ -7,18 +12,18 @@
 - Base classes (Evaluator, Selector, Crossover, Mutation)
 - Basic operators (UniformCrossover, BitFlipMutation, TournamentSelector)
 - ML integration (ModelWrapper, AccuracyEvaluator, dataset loader)
-- Integration tests passing on multiple datasets
+- Integration test passing on Iris
 
 ### Phase 2: Extended Operators & Evaluators (COMPLETE)
 
-**Crossover Operators** (5 implemented):
+**Crossover Operators** (4 implemented, plus a base class):
 - Uniform crossover
 - Single-point crossover
 - Two-point crossover
 - Multi-point crossover
 - Base crossover abstract class
 
-**Selection Strategies** (5 implemented):
+**Selection Strategies** (4 implemented, plus a base class):
 - Tournament selector
 - Roulette selector
 - Ranking selector
@@ -67,12 +72,12 @@
 - Method comparison (box plots)
 - Feature count comparison (sparsity)
 - Multi-metric comparison (2×2 grid)
-- Accuracy vs sparsity (Pareto frontier)
+- Accuracy vs sparsity (scatter, saved as *_pareto.png)
 - Combined dashboard (3-panel GA view)
 
 ### Phase 6: Testing & Documentation (COMPLETE)
 
-**Testing** (280+ tests, 82% coverage):
+**Testing** (290 tests, about 67% line coverage):
 - Unit tests for all operators
 - Unit tests for evaluators
 - Integration tests for complete workflows
@@ -83,8 +88,8 @@
 - Main README (concise, updated)
 - Getting Started guide
 - Architecture documentation
-- Tutorial (700 lines, 6 sections)
-- Module READMEs (11 modules)
+- Tutorial (about 500 lines, 6 sections)
+- Module READMEs (10 modules)
 - Developer guides (core module)
 - API documentation in docstrings
 - Sphinx-generated API reference (future)
@@ -99,13 +104,13 @@
 - Full visualization suite generation
 
 **Results Achieved**:
-- Breast Cancer: 98.3% accuracy with 60% feature reduction
-- Iris: 98.3% accuracy with 50% feature reduction
-- Wine: 100% accuracy with 50% feature reduction
+- Breast Cancer: 98.3% accuracy with about 52% feature reduction
+- Iris: 97.7% accuracy with 35% feature reduction
+- Wine: 100% accuracy with about 45% feature reduction
 
 ---
 
-## Phase 3: Advanced Features (PARTIALLY COMPLETE)
+## Phase 3: Advanced Features (NOT FINISHED)
 
 ### Multi-Objective Optimization (Not Implemented)
 - NSGA-II selector implementation
@@ -118,10 +123,10 @@
 - Feature-aware mutation (uses correlation matrix)
 - Dynamic mutation rate (decreases over generations)
 
-### Analysis Tools (Partially Implemented)
-- Cross-validation in evaluators
-- Feature correlation analyzer (standalone tool)
-- Preprocessor utilities (normalization, scaling)
+### Analysis Tools (Not Implemented)
+- Cross-validation in evaluators (not done; evaluators score on a validation set)
+- Feature correlation analyzer (not done)
+- Preprocessor utilities (not done; only the Chi-squared baseline scales its input, with MinMaxScaler)
 
 ---
 
@@ -281,8 +286,8 @@
 
 ## References
 
-- Implementation details: See `docs/ARCHITECTURE.md`
-- Usage guide: See `docs/GETTING_STARTED.md`
-- Tutorial: See `docs/TUTORIAL.md`
+- Architecture: [Architecture](../user-guide/architecture.md)
+- Quick start: [Quick Start](../getting-started/quickstart.md)
+- Tutorial: [Tutorial](../getting-started/tutorial.md)
 - Module docs: See `fsga/*/README.md`
 - Developer guide: See `fsga/core/README_DEV.md`

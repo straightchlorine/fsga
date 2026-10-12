@@ -4,11 +4,12 @@ Provides plotting utilities for fitness evolution, population diversity,
 feature stability, and comparison across methods.
 """
 
-from itertools import zip_strict
 from pathlib import Path
+from typing import Any
 
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib import colormaps
 
 
 def plot_fitness_evolution(
@@ -302,11 +303,11 @@ def plot_method_comparison(
     methods = list(results_dict.keys())
     data = [results_dict[method] for method in methods]
 
-    bp = ax.boxplot(data, labels=methods, patch_artist=True, showmeans=True)
+    bp = ax.boxplot(data, tick_labels=methods, patch_artist=True, showmeans=True)
 
     # Color the boxes
-    colors = plt.cm.Set3(np.linspace(0, 1, len(methods)))
-    for patch, color in zip_strict(bp["boxes"], colors):
+    colors = colormaps["Set3"](np.linspace(0, 1, len(methods)))
+    for patch, color in zip(bp["boxes"], colors, strict=True):
         patch.set_facecolor(color)
 
     ax.set_ylabel(metric_name, fontsize=12)
@@ -457,11 +458,11 @@ def plot_feature_count_comparison(
         else:
             raise ValueError(f"Method '{method}' missing n_features data")
 
-    bp = ax.boxplot(data, labels=methods, patch_artist=True, showmeans=True)
+    bp = ax.boxplot(data, tick_labels=methods, patch_artist=True, showmeans=True)
 
     # Color the boxes
-    colors = plt.cm.Set3(np.linspace(0, 1, len(methods)))
-    for patch, color in zip_strict(bp["boxes"], colors):
+    colors = colormaps["Set3"](np.linspace(0, 1, len(methods)))
+    for patch, color in zip(bp["boxes"], colors, strict=True):
         patch.set_facecolor(color)
 
     ax.set_ylabel(metric_name, fontsize=12)
@@ -514,13 +515,13 @@ def plot_multi_metric_comparison(
     fig.suptitle(title, fontsize=16, fontweight="bold")
 
     methods = list(results_dict.keys())
-    colors = plt.cm.Set3(np.linspace(0, 1, len(methods)))
+    colors = colormaps["Set3"](np.linspace(0, 1, len(methods)))
 
     # 1. Accuracy (top-left)
     ax1 = axes[0, 0]
     acc_data = [results_dict[m]["accuracies"] for m in methods]
-    bp1 = ax1.boxplot(acc_data, labels=methods, patch_artist=True, showmeans=True)
-    for patch, color in zip_strict(bp1["boxes"], colors):
+    bp1 = ax1.boxplot(acc_data, tick_labels=methods, patch_artist=True, showmeans=True)
+    for patch, color in zip(bp1["boxes"], colors, strict=True):
         patch.set_facecolor(color)
     ax1.set_ylabel("Accuracy", fontsize=11)
     ax1.set_title("Classification Accuracy", fontweight="bold")
@@ -529,15 +530,15 @@ def plot_multi_metric_comparison(
 
     # 2. Feature Count (top-right)
     ax2 = axes[0, 1]
-    feat_data = []
+    feat_data: list[Any] = []
     for m in methods:
         n_feat = results_dict[m].get("n_features")
         if isinstance(n_feat, (int, float)):
             feat_data.append([n_feat])
         else:
             feat_data.append(n_feat)
-    bp2 = ax2.boxplot(feat_data, labels=methods, patch_artist=True, showmeans=True)
-    for patch, color in zip_strict(bp2["boxes"], colors):
+    bp2 = ax2.boxplot(feat_data, tick_labels=methods, patch_artist=True, showmeans=True)
+    for patch, color in zip(bp2["boxes"], colors, strict=True):
         patch.set_facecolor(color)
     ax2.set_ylabel("Number of Features", fontsize=11)
     ax2.set_title("Feature Count (Sparsity)", fontweight="bold")
@@ -547,8 +548,10 @@ def plot_multi_metric_comparison(
     # 3. Runtime (bottom-left)
     ax3 = axes[1, 0]
     runtime_data = [results_dict[m]["runtimes"] for m in methods]
-    bp3 = ax3.boxplot(runtime_data, labels=methods, patch_artist=True, showmeans=True)
-    for patch, color in zip_strict(bp3["boxes"], colors, strict=True):
+    bp3 = ax3.boxplot(
+        runtime_data, tick_labels=methods, patch_artist=True, showmeans=True
+    )
+    for patch, color in zip(bp3["boxes"], colors, strict=True):
         patch.set_facecolor(color)
     ax3.set_ylabel("Runtime (seconds)", fontsize=11)
     ax3.set_title("Computational Efficiency", fontweight="bold")
@@ -566,7 +569,7 @@ def plot_multi_metric_comparison(
     ax4.tick_params(axis="x", rotation=15)
 
     # Add value labels on bars
-    for bar, val in zip_strict(bars, stability_data):
+    for bar, val in zip(bars, stability_data, strict=True):
         height = bar.get_height()
         ax4.text(
             bar.get_x() + bar.get_width() / 2.0,
@@ -616,11 +619,11 @@ def plot_accuracy_vs_sparsity(
     fig, ax = plt.subplots(figsize=(10, 7))
 
     methods = list(results_dict.keys())
-    colors = plt.cm.Set3(np.linspace(0, 1, len(methods)))
+    colors = colormaps["Set3"](np.linspace(0, 1, len(methods)))
 
     for i, (method, results) in enumerate(results_dict.items()):
         accuracies = results["accuracies"]
-        n_features = results.get("n_features")
+        n_features: Any = results.get("n_features")
 
         if isinstance(n_features, (int, float)):
             # Scalar
@@ -688,7 +691,7 @@ def plot_accuracy_vs_sparsity(
         fontsize=10,
         verticalalignment="bottom",
         horizontalalignment="right",
-        bbox={"boxstyle": "round", "facecolor": "wheat", "alpha": "0.5"},
+        bbox={"boxstyle": "round", "facecolor": "wheat", "alpha": 0.5},
     )
 
     ax.set_xlim(-0.05, 1.05)

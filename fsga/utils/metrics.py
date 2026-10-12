@@ -42,7 +42,7 @@ def jaccard_similarity(set_a: np.ndarray, set_b: np.ndarray) -> float:
     if union == 0:
         return 1.0
 
-    return intersection / union
+    return float(intersection / union)
 
 
 def jaccard_stability(chromosomes: list[np.ndarray]) -> float:
@@ -123,7 +123,7 @@ def cohens_d(group_a: np.ndarray, group_b: np.ndarray) -> float:
     if pooled_std == 0:
         return 0.0
 
-    return (mean_a - mean_b) / pooled_std
+    return float((mean_a - mean_b) / pooled_std)
 
 
 def effect_size_interpretation(d: float) -> str:
@@ -246,8 +246,9 @@ def feature_selection_frequency(chromosomes: list[np.ndarray]) -> np.ndarray:
     if len(chromosomes) == 0:
         raise ValueError("Need at least one chromosome")
 
-    chromosomes = np.array(chromosomes)
-    return np.mean(chromosomes, axis=0)
+    chromosome_matrix = np.array(chromosomes)
+    frequencies: np.ndarray = np.mean(chromosome_matrix, axis=0)
+    return frequencies
 
 
 def core_features(
@@ -277,7 +278,8 @@ def core_features(
     if feature_names is not None:
         return [feature_names[i] for i in core_indices]
     else:
-        return core_indices.tolist()
+        indices: list[int] = core_indices.tolist()
+        return indices
 
 
 def sparsity(chromosome: np.ndarray) -> float:
@@ -298,7 +300,7 @@ def sparsity(chromosome: np.ndarray) -> float:
     """
     n_features = len(chromosome)
     n_selected = np.sum(chromosome)
-    return 1.0 - (n_selected / n_features)
+    return float(1.0 - (n_selected / n_features))
 
 
 def average_sparsity(chromosomes: list[np.ndarray]) -> float:

@@ -1,12 +1,17 @@
+---
+title: Feature Selection via Genetic Algorithm in Python
+description: FSGA is a Python library for feature selection with genetic algorithms, with swappable operators, baselines, statistical tests, plots and an experiment runner.
+---
+
 # Feature Selection via Genetic Algorithm (FSGA)
 
 A university project implementing feature selection using Genetic Algorithms, with evaluation and visualization tools.
 
-[![Tests](https://github.com/straightchlorine/feature-selection-via-genetic-algorithm/workflows/Tests/badge.svg)](https://github.com/straightchlorine/feature-selection-via-genetic-algorithm/actions)
+[![Tests](https://github.com/straightchlorine/fsga/workflows/Tests/badge.svg)](https://github.com/straightchlorine/fsga/actions)
 [![PyPI version](https://badge.fury.io/py/fsga.svg)](https://pypi.org/project/fsga/)
 [![Total Downloads](https://static.pepy.tech/badge/fsga)](https://pepy.tech/project/fsga)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/fsga)](https://pypi.org/project/fsga/)
-[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Overview
@@ -16,7 +21,7 @@ FSGA is a modular library for feature selection using genetic algorithms.
 ### Key Features
 
 - **Modular Design**: Swappable operators, selectors, and evaluators
-- **Multiple Operators**: 5 crossover types, 5 selection strategies, 3 fitness functions
+- **Multiple Operators**: 4 crossover operators, 4 selection strategies, 3 fitness functions
 - **Baseline Comparisons**: Built-in RFE, LASSO, Mutual Information, Chi², ANOVA
 - **Statistical Testing**: Wilcoxon, Mann-Whitney, Cohen's d, Jaccard stability
 - **Visualization**: 9 plot functions for analysis and comparison
@@ -62,9 +67,9 @@ print(f"Features: {results['best_chromosome'].sum()}/{X_train.shape[1]}")
 
 | Dataset | GA Accuracy | Features Used | Improvement |
 |---------|-------------|---------------|-------------|
-| **Breast Cancer** | 98.3% | 12/30 (40%) | +2.6% vs all features |
-| **Iris** | 98.3% | 2/4 (50%) | +6.2% vs all features |
-| **Wine** | 100% | 6.5/13 (50%) | +1.4% vs all features |
+| **Breast Cancer** | 98.3% | 14.3/30 (48%) | +2.6% vs all features |
+| **Iris** | 97.7% | 2.6/4 (65%) | +2.7% vs all features |
+| **Wine** | 100% | 7.2/13 (55%) | +1.7% vs all features |
 
 ## Installation
 
@@ -75,8 +80,8 @@ pip install fsga
 Or install from source:
 
 ```bash
-git clone https://github.com/straightchlorine/feature-selection-via-genetic-algorithm.git
-cd feature-selection-via-genetic-algorithm
+git clone https://github.com/straightchlorine/fsga.git
+cd fsga
 pip install -e .
 ```
 
@@ -87,8 +92,6 @@ pip install -e .
 - **[Project Plan](about/project-plan.md)** - Development roadmap and status
 
 ## Project Status
-
-**Current**: 5,161 lines of code, 280+ tests (82% coverage)
 
 **Delivered**:
 - GA framework with swappable operators
@@ -107,4 +110,4 @@ See [Project Plan](about/project-plan.md) for roadmap.
 
 ## License
 
-MIT License - see LICENSE file in the repository for details.
+MIT License (see `pyproject.toml`). A LICENSE file has not been added to the repository yet.

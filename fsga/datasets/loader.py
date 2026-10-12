@@ -3,9 +3,61 @@
 Provides easy access to sklearn datasets with train/test splitting.
 """
 
+from typing import Literal, overload
+
 import numpy as np
 from sklearn.datasets import load_breast_cancer, load_digits, load_iris, load_wine
 from sklearn.model_selection import train_test_split
+
+
+@overload
+def load_dataset(
+    name: str,
+    split: Literal[False] = False,
+    test_size: float = 0.2,
+    val_size: float | None = None,
+    stratify: bool = True,
+    random_state: int = 42,
+) -> tuple[np.ndarray, np.ndarray, list]: ...
+
+
+@overload
+def load_dataset(
+    name: str,
+    split: Literal[True],
+    test_size: float = 0.2,
+    val_size: None = None,
+    stratify: bool = True,
+    random_state: int = 42,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, list]: ...
+
+
+@overload
+def load_dataset(
+    name: str,
+    split: Literal[True],
+    test_size: float = 0.2,
+    val_size: float = ...,
+    stratify: bool = True,
+    random_state: int = 42,
+) -> tuple[
+    np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, list
+]: ...
+
+
+@overload
+def load_dataset(
+    name: str,
+    split: bool = False,
+    test_size: float = 0.2,
+    val_size: float | None = None,
+    stratify: bool = True,
+    random_state: int = 42,
+) -> (
+    tuple[np.ndarray, np.ndarray, list]
+    | tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, list]
+    | tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, np.ndarray, list]
+): ...
 
 
 def load_dataset(
